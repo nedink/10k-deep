@@ -1,20 +1,19 @@
-package com.nedink;
+package com.nedink.util;
 
 import java.util.Random;
 
 public class Rand {
 
-    public static Random rand = new Random();
+    public static Random rand = new Random(0);
 
     public Rand(long seed) {
         rand = new Random(seed);
     }
 
-    static int range(int max) {
+    public static int intRange(int max) {
         return Math.abs(rand.nextInt()) % max;
     }
-
-    static int range(int min, int max) {
+    public static int intRange(int min, int max) {
         return Math.abs(rand.nextInt() % (max - min)) + min;
     }
 }

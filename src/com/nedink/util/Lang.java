@@ -1,7 +1,7 @@
-package com.nedink;
+package com.nedink.util;
 
-import static com.nedink.Rand.rand;
-import static com.nedink.Rand.range;
+import static com.nedink.util.Rand.rand;
+import static com.nedink.util.Rand.intRange;
 
 public class Lang {
 
@@ -52,18 +52,18 @@ public class Lang {
         Boolean start = rand.nextBoolean();
 
         // vowel or consonant start
-        word += start ? consonants[range(consonants.length)] : vowels[range(vowels.length)];
+        word += start ? consonants[Rand.intRange(consonants.length)] : vowels[Rand.intRange(vowels.length)];
 
-        word += start ? vowels[range(vowels.length)] : consonants[range(consonants.length)];
+        word += start ? vowels[Rand.intRange(vowels.length)] : consonants[Rand.intRange(consonants.length)];
 
-        word += start ? consonants[range(consonants.length)] : vowels[range(vowels.length)];
+        word += start ? consonants[Rand.intRange(consonants.length)] : vowels[Rand.intRange(vowels.length)];
 
-        word += start ? vowels[range(vowels.length)] : consonants[range(consonants.length)];
+        word += start ? vowels[Rand.intRange(vowels.length)] : consonants[Rand.intRange(consonants.length)];
 
         word += "-";
 
-        word += numbers[range(numbers.length)];
-        word += numbers[range(numbers.length)];
+        word += numbers[Rand.intRange(numbers.length)];
+        word += numbers[Rand.intRange(numbers.length)];
 
         word = word.substring(0, 1).toUpperCase() + word.substring(1, word.length());
 

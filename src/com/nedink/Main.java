@@ -1,32 +1,20 @@
 package com.nedink;
 
-import java.util.Scanner;
+import com.nedink.ui.Menu;
+import com.nedink.ui.MenuItem;
 
-import static com.nedink.ConsoleColors.RED;
-import static com.nedink.ConsoleColors.RESET;
-import static com.nedink.Rand.range;
+import java.io.IOException;
+import java.util.Scanner;
 
 public class Main {
 
-    public static void main(String[] args) {
-        Game game = new Game();
-        new TimerRunner().run();
+    public static void main(String[] args) throws IOException {
 
-        for (int i = 0; i < 80; ++i) {
-            System.out.print(RED + "0" + RESET);
-        }
-
+        // Start
         Scanner in = new Scanner(System.in);
 
-        while (in.next() == null) {
-            for (int i = 0; i < range(15, 20); ++i) {
-                System.out.print(">");
-            }
-            System.out.print(" ");
-        }
-//        game.run();
+        System.out.println(new Menu(new MenuItem[]{new MenuItem()}).print());
+
 
     }
-
-
 }
