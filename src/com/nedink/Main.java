@@ -10,11 +10,15 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
-        // Start
         Scanner in = new Scanner(System.in);
 
-        System.out.println(new Menu(new MenuItem[]{new MenuItem()}).print());
+        // Start
+        MenuItem[] menu = {
+                new MenuItem("Go")
+        };
+        System.out.println(new Menu(menu).print());
 
+        
 
     }
 }

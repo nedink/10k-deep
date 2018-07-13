@@ -35,14 +35,14 @@ public class Menu extends AbstractMessage {
 
         //    │                                                                        │
 
-        out += new LineBuilder()
-                .add(margin())
-                .add(BOX_DRAWINGS_LIGHT_VERTICAL)
-                .add(EMPTY_BLOCK, WIDTH_IN_MARGIN - 2)
-                .add(BOX_DRAWINGS_LIGHT_VERTICAL)
-                .add(margin())
-                .add('\n')
-                .build();
+//        out += new LineBuilder()
+//                .add(margin())
+//                .add(BOX_DRAWINGS_LIGHT_VERTICAL)
+//                .add(EMPTY_BLOCK, WIDTH_IN_MARGIN - 2)
+//                .add(BOX_DRAWINGS_LIGHT_VERTICAL)
+//                .add(margin())
+//                .add('\n')
+//                .build();
 
         //    │   1. <MenuItem>                                                        │
 
@@ -66,14 +66,14 @@ public class Menu extends AbstractMessage {
 
         //    │                                                                        │
 
-        out += new LineBuilder()
-                .add(margin())
-                .add(BOX_DRAWINGS_LIGHT_VERTICAL)
-                .add(EMPTY_BLOCK, WIDTH_IN_MARGIN - 2)
-                .add(BOX_DRAWINGS_LIGHT_VERTICAL)
-                .add(margin())
-                .add('\n')
-                .build();
+//        out += new LineBuilder()
+//                .add(margin())
+//                .add(BOX_DRAWINGS_LIGHT_VERTICAL)
+//                .add(EMPTY_BLOCK, WIDTH_IN_MARGIN - 2)
+//                .add(BOX_DRAWINGS_LIGHT_VERTICAL)
+//                .add(margin())
+//                .add('\n')
+//                .build();
 
         //    └────────────────────────────────────────────────────────────────────────┘
 
