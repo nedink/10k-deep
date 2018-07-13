@@ -1,4 +1,4 @@
-package com.nedink.util;
+package com.nedink.ui;
 
 public abstract class AbstractMessage {
     public abstract String print();

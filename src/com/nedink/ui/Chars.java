@@ -1,6 +1,6 @@
 package com.nedink.ui;
 
-public class Chars {
+public final class Chars {
 
     public static final char EMPTY_BLOCK = ' ';
 

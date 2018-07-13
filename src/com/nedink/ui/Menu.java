@@ -1,11 +1,7 @@
 package com.nedink.ui;
 
-import com.nedink.util.AbstractMessage;
-
 import static com.nedink.ui.Chars.*;
-import static com.nedink.ui.UI.MARGIN;
-import static com.nedink.ui.UI.WIDTH_IN_MARGIN;
-import static com.nedink.ui.UI.WIDTH_IN_PANEL_IN_MARGIN;
+import static com.nedink.ui.UI.*;
 
 /**
  * Full-width panel just above input
@@ -33,17 +29,6 @@ public class Menu extends AbstractMessage {
                 .add('\n')
                 .build();
 
-        //    │                                                                        │
-
-//        out += new LineBuilder()
-//                .add(margin())
-//                .add(BOX_DRAWINGS_LIGHT_VERTICAL)
-//                .add(EMPTY_BLOCK, WIDTH_IN_MARGIN - 2)
-//                .add(BOX_DRAWINGS_LIGHT_VERTICAL)
-//                .add(margin())
-//                .add('\n')
-//                .build();
-
         //    │   1. <MenuItem>                                                        │
 
         for (int i = 0; i < items.length; ++i) {
@@ -63,17 +48,6 @@ public class Menu extends AbstractMessage {
                     .add('\n')
                     .build();
         }
-
-        //    │                                                                        │
-
-//        out += new LineBuilder()
-//                .add(margin())
-//                .add(BOX_DRAWINGS_LIGHT_VERTICAL)
-//                .add(EMPTY_BLOCK, WIDTH_IN_MARGIN - 2)
-//                .add(BOX_DRAWINGS_LIGHT_VERTICAL)
-//                .add(margin())
-//                .add('\n')
-//                .build();
 
         //    └────────────────────────────────────────────────────────────────────────┘
 
