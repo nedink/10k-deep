@@ -5,6 +5,8 @@ import com.nedink.ui.ConsoleColors;
 import com.nedink.world.Player;
 import com.nedink.world.Room;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -21,12 +23,10 @@ public class Main {
     public static void main(String[] args) {
 
         running = true;
-
         room = new Room(null, true);
         player = new Player();
-
         scanner = new Scanner(System.in);
-
+        messageTypeList = new LinkedList<>();
         message = "";
 
         while (running) {
@@ -38,10 +38,16 @@ public class Main {
 
     private static void prepare() {
 
-        String roomPath = "";
+        StringBuilder roomPath = new StringBuilder();
         for (Room room : room.getPath()) {
-            roomPath += room.isLeft ? "l" : "r";
+//            roomPath.append(room.isLeft ? "l" : "r");
+            roomPath.append(room.leftChild == null && room.rightChild == null ? ConsoleColors.RED
+                        : room.leftChild != null && room.rightChild != null ? ConsoleColors.GREEN
+                            : ConsoleColors.YELLOW)
+                    .append(room.isLeft ? "l" : "r")
+                    .append(ConsoleColors.RESET);
         }
+
         message += "You are in room " + roomPath + "\n";
     }
 
@@ -67,7 +73,7 @@ public class Main {
                     break;
                 }
                 case GO_RIGHT: {
-                    if (room.leftChild == null)
+                    if (room.rightChild == null)
                         room.spawnRight();
                     room = room.rightChild;
                     break;

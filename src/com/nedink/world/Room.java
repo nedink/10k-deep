@@ -17,14 +17,10 @@ public class Room {
     public Room(Room parent, boolean isLeft) {
         this.parent = parent;
         this.isLeft = isLeft;
-        if (parent == null) {
-            // this is first room
+        if (parent == null)
             depth = 0;
-            return;
-        }
-        depth = parent.depth + 1;
-
-        // consider depth
+        else
+            depth = parent.depth + 1;
     }
 
     public List<Room> getPath() {
@@ -38,6 +34,7 @@ public class Room {
     public Room spawnLeft() {
         return (leftChild = new Room(this, true));
     }
+
     public Room spawnRight() {
         return (rightChild = new Room(this, false));
     }

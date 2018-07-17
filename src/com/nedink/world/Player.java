@@ -16,7 +16,7 @@ public class Player {
     public Weapon[] weaponSlots;
     private int weaponSlotsAvailable;
 
-    Player() {
+    public Player() {
         level = 0;
         pointsToNextLevel = 5;
         levelProgress = 0;
