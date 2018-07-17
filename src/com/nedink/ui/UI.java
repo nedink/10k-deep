@@ -13,13 +13,13 @@ public class UI {
     public static final int WIDTH_IN_PANEL_IN_MARGIN = WIDTH_IN_PANEL - MARGIN * 2;
 
     private Panel[] panels;
-    private Input input;
+    private InputPanel input;
 
     private char[][] buffer;
 
     public UI() {
         panels = new Panel[]{};
-        input = new Input();
+        input = new InputPanel();
     }
 
     public UI(Panel[] panels) {
@@ -31,6 +31,6 @@ public class UI {
             panel.superimpose(buffer);
         }
         input.superimpose(buffer);
-        return "";
+
     }
 }

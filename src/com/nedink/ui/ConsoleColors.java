@@ -3,7 +3,7 @@
  * https://stackoverflow.com/questions/5762491/how-to-print-color-in-console-using-system-out-println/45444716#45444716
  */
 
-package com.nedink;
+package com.nedink.ui;
 
 public class ConsoleColors {
     // Reset
