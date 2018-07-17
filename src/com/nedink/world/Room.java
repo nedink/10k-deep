@@ -15,6 +15,7 @@ public class Room {
     public Enemy[] enemies;
 
     public Room(Room parent, boolean isLeft) {
+        this.parent = parent;
         this.isLeft = isLeft;
         if (parent == null) {
             // this is first room
@@ -28,17 +29,10 @@ public class Room {
 
     public List<Room> getPath() {
         List<Room> path = new LinkedList<>();
-        path.add(this);
         if (parent != null)
             path.addAll(parent.getPath());
+        path.add(this);
         return path;
-//        List<Room> path = new LinkedList<>();
-//        Room room = this;
-//        path.add(this);
-//        while ((room = room.parent) != null) {
-//            path.add(room);
-//        }
-//        return path;
     }
 
     public Room spawnLeft() {

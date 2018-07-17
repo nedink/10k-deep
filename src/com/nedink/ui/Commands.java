@@ -7,6 +7,7 @@ public final class Commands {
     public enum CommandType {
         GO_LEFT,
         GO_RIGHT,
+        GO_BACK,
         QUIT
     }
     public static Map<String, CommandType> commandMap;
@@ -20,6 +21,10 @@ public final class Commands {
         commandMap.put("go right", CommandType.GO_RIGHT);
         commandMap.put("right", CommandType.GO_RIGHT);
         commandMap.put("r", CommandType.GO_RIGHT);
+
+        commandMap.put("go back", CommandType.GO_BACK);
+        commandMap.put("back", CommandType.GO_BACK);
+        commandMap.put("b", CommandType.GO_BACK);
 
         commandMap.put("quit", CommandType.QUIT);
         commandMap.put("q", CommandType.QUIT);

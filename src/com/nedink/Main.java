@@ -5,8 +5,7 @@ import com.nedink.ui.ConsoleColors;
 import com.nedink.world.Player;
 import com.nedink.world.Room;
 
-import java.io.IOException;
-import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -14,51 +13,81 @@ public class Main {
     public static boolean running;
     private static Player player;
     private static Room room;
+    private static Scanner scanner;
+    private static String message;
+    private static List<MessageType> messageTypeList;
+    private static int state;
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
 
         running = true;
-
-        Scanner scanner = new Scanner(System.in);
 
         room = new Room(null, true);
         player = new Player();
 
+        scanner = new Scanner(System.in);
+
+        message = "";
+
         while (running) {
-            System.out.print(processInput(scanner.nextLine().trim()));
+            prepare();
+            print();
+            processInput();
         }
     }
 
-    private static String processInput(String input) {
-        String message = "";
+    private static void prepare() {
 
         String roomPath = "";
-        System.out.println("len: " + room.getPath().size());
         for (Room room : room.getPath()) {
-                roomPath += room.isLeft ? "l" : "r";
-//            if (room != null);
+            roomPath += room.isLeft ? "l" : "r";
         }
         message += "You are in room " + roomPath + "\n";
+    }
 
-        try {
-            switch (Commands.commandMap.get(input)) {
-                case GO_LEFT:
-                    room = room.spawnLeft();
-                    System.out.println("spawned left");
-                    break;
-                case GO_RIGHT:
-                    room = room.spawnRight();
-                    System.out.println("spawned right");
-                    break;
-                case QUIT:
-                    System.exit(1);
-                default:
-            }
-        }
-        catch (NullPointerException e) {
+    private static void print() {
+        System.out.print(message);
+        message = "";
+    }
+
+    private static void processInput() {
+
+        String input = scanner.nextLine().trim();
+
+        Commands.CommandType commandType = Commands.commandMap.get(input);
+        if (commandType == null) {
             message += ConsoleColors.RED + "Command not recognized.\n" + ConsoleColors.RESET;
         }
-
-        return message;
+        else {
+            switch (commandType) {
+                case GO_LEFT: {
+                    if (room.leftChild == null)
+                        room.spawnLeft();
+                    room = room.leftChild;
+                    break;
+                }
+                case GO_RIGHT: {
+                    if (room.leftChild == null)
+                        room.spawnRight();
+                    room = room.rightChild;
+                    break;
+                }
+                case GO_BACK: {
+                    if (room.parent == null) {
+                        messageTypeList.add(MessageType.NO_PARENT_ROOM);
+                        break;
+                    }
+                    room = room.parent;
+                    break;
+                }
+                case QUIT: {
+                    System.exit(1);
+                    break;
+                }
+                default: {
+                    break;
+                }
+            }
+        }
     }
 }
