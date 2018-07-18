@@ -1,22 +1,22 @@
 package com.nedink.world;
 
-public class Item {
-    private float weight;
-    private float volume;
+import java.util.List;
 
-    public float getWeight() {
+public class Item {
+
+    public List<ItemPart> parts;
+
+    public double getWeight() {
+        double weight = 0.0;
+        for (ItemPart part : parts)
+            weight += part.getWeight();
         return weight;
     }
 
-    public void setWeight(float weight) {
-        this.weight = weight;
-    }
-
-    public float getVolume() {
+    public double getVolume() {
+        double volume = 0.0;
+        for (ItemPart part : parts)
+            volume += part.getVolume();
         return volume;
-    }
-
-    public void setVolume(float volume) {
-        this.volume = volume;
     }
 }

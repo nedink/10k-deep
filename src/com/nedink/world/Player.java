@@ -13,7 +13,7 @@ public class Player {
     private float inventoryMaxVolume;
     private float inventoryMaxWeight;
 
-    public Weapon[] weaponSlots;
+    public WeaponPart[] weaponAttributeSlots;
     private int weaponSlotsAvailable;
 
     public Player() {
@@ -25,7 +25,7 @@ public class Player {
         inventory = new ArrayList<>();
 
         weaponSlotsAvailable = 1;
-        weaponSlots = new Weapon[]{};
+        weaponAttributeSlots = new WeaponPart[]{};
 
     }
 
@@ -41,8 +41,8 @@ public class Player {
         return 0;
     }
 
-    public float getInventoryWeight() {
-        float weight = 0f;
+    public double getInventoryWeight() {
+        double weight = 0f;
 
         for (Item item : inventory)
             weight += item.getWeight();
@@ -50,8 +50,8 @@ public class Player {
         return weight;
     }
 
-    public float getInventoryVolume() {
-        float weight = 0f;
+    public double getInventoryVolume() {
+        double weight = 0f;
 
         for (Item item : inventory)
             weight += item.getWeight();

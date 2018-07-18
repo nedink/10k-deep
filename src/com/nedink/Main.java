@@ -2,13 +2,11 @@ package com.nedink;
 
 import com.nedink.ui.Commands;
 import com.nedink.ui.ConsoleColors;
+import com.nedink.util.Rand;
 import com.nedink.world.Player;
 import com.nedink.world.Room;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
 
@@ -17,16 +15,24 @@ public class Main {
     private static Room room;
     private static Scanner scanner;
     private static String message;
-    private static List<MessageType> messageTypeList;
+    private static Set<MessageType> messageTypeSet;
     private static int state;
 
     public static void main(String[] args) {
+
+        if (args.length > 0)
+            try {
+                Rand.rand.setSeed(Long.valueOf(args[0]));
+            } catch (NumberFormatException e) {
+                System.out.println(ConsoleColors.RED + "ERROR Invalid Seed" + ConsoleColors.RESET);
+                System.exit(1);
+            }
 
         running = true;
         room = new Room(null, true);
         player = new Player();
         scanner = new Scanner(System.in);
-        messageTypeList = new LinkedList<>();
+        messageTypeSet = new HashSet<>();
         message = "";
 
         while (running) {
@@ -38,12 +44,14 @@ public class Main {
 
     private static void prepare() {
 
+        // Game state description
+
+
         StringBuilder roomPath = new StringBuilder();
         for (Room room : room.getPath()) {
-//            roomPath.append(room.isLeft ? "l" : "r");
             roomPath.append(room.leftChild == null && room.rightChild == null ? ConsoleColors.RED
-                        : room.leftChild != null && room.rightChild != null ? ConsoleColors.GREEN
-                            : ConsoleColors.YELLOW)
+                    : room.leftChild != null && room.rightChild != null ? ConsoleColors.GREEN
+                    : ConsoleColors.YELLOW)
                     .append(room.isLeft ? "l" : "r")
                     .append(ConsoleColors.RESET);
         }
@@ -58,13 +66,16 @@ public class Main {
 
     private static void processInput() {
 
-        String input = scanner.nextLine().trim();
+        String input;
+        while ((input = scanner.nextLine().trim()).equals("")){}
 
         Commands.CommandType commandType = Commands.commandMap.get(input);
+//        if (commandType == null) {
+//            message += ConsoleColors.RED + "Command not recognized.\n" + ConsoleColors.RESET;
+//        }
         if (commandType == null) {
-            message += ConsoleColors.RED + "Command not recognized.\n" + ConsoleColors.RESET;
-        }
-        else {
+            messageTypeSet.add(MessageType.COMMAND_NOT_FOUD);
+        } else {
             switch (commandType) {
                 case GO_LEFT: {
                     if (room.leftChild == null)
@@ -80,7 +91,7 @@ public class Main {
                 }
                 case GO_BACK: {
                     if (room.parent == null) {
-                        messageTypeList.add(MessageType.NO_PARENT_ROOM);
+                        messageTypeSet.add(MessageType.NO_PARENT_ROOM);
                         break;
                     }
                     room = room.parent;
