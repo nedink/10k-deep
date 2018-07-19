@@ -1,6 +1,8 @@
 package com.nedink.world;
 
-public class ItemPart {
+import com.nedink.util.Named;
+
+public abstract class ItemPart extends Named {
 
     private int level;
     private double volume;

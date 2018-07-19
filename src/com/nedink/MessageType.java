@@ -2,6 +2,7 @@ package com.nedink;
 
 public enum MessageType {
     IN_ROOM_ETC,
-    COMMAND_NOT_FOUD,
+    UNKOWN_COMMAND,
     NO_PARENT_ROOM,
+    HELP_PAGE,
 }

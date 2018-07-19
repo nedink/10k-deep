@@ -1,16 +1,13 @@
-package com.nedink.ui;
+package com.nedink.unused;
 
+import com.nedink.ui.Chars;
 import com.nedink.util.XY;
 
-import javax.swing.border.Border;
-import javax.swing.text.Style;
-
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.nedink.ui.UI.PANEL_PADDING_HORIZONTAL;
-import static com.nedink.ui.UI.PANEL_PADDING_VERTICAL;
+import static com.nedink.unused.UI.PANEL_PADDING_HORIZONTAL;
+import static com.nedink.unused.UI.PANEL_PADDING_VERTICAL;
 
 public abstract class Panel {
 

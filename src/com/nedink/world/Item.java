@@ -1,8 +1,10 @@
 package com.nedink.world;
 
+import com.nedink.util.Named;
+
 import java.util.List;
 
-public class Item {
+public class Item extends Named {
 
     public List<ItemPart> parts;
 

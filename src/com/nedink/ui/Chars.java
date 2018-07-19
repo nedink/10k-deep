@@ -3,7 +3,6 @@ package com.nedink.ui;
 public final class Chars {
 
     public static final char EMPTY_BLOCK = ' ';
-
     public static final char FULL_BLOCK = 0x2588;
 
     public static final char LOWER_ONE_EIGHTH_BLOCK = 0x2581;

@@ -1,15 +1,12 @@
 package com.nedink.ui;
 
+import com.nedink.CommandType;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public final class Commands {
-    public enum CommandType {
-        GO_LEFT,
-        GO_RIGHT,
-        GO_BACK,
-        QUIT
-    }
+
     public static Map<String, CommandType> commandMap;
     static {
         commandMap = new HashMap<>();
@@ -25,6 +22,10 @@ public final class Commands {
         commandMap.put("go back", CommandType.GO_BACK);
         commandMap.put("back", CommandType.GO_BACK);
         commandMap.put("b", CommandType.GO_BACK);
+
+        commandMap.put("get help", CommandType.HELP);
+        commandMap.put("help", CommandType.HELP);
+        commandMap.put("h", CommandType.HELP);
 
         commandMap.put("quit", CommandType.QUIT);
         commandMap.put("q", CommandType.QUIT);

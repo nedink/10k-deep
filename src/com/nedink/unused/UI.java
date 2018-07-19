@@ -1,4 +1,4 @@
-package com.nedink.ui;
+package com.nedink.unused;
 
 public class UI {
 

@@ -1,7 +1,9 @@
-package com.nedink.ui;
+package com.nedink.unused;
+
+import com.nedink.message.AbstractMessage;
 
 import static com.nedink.ui.Chars.*;
-import static com.nedink.ui.UI.*;
+import static com.nedink.unused.UI.*;
 
 /**
  * Full-width panel just above input
@@ -15,7 +17,7 @@ public class Menu extends AbstractMessage {
     }
 
     @Override
-    public String print() {
+    public String getMessage() {
         String out = "";
 
         //    ┌────────────────────────────────────────────────────────────────────────┐
@@ -29,7 +31,7 @@ public class Menu extends AbstractMessage {
                 .add('\n')
                 .build();
 
-        //    │   1. <MenuItem>                                                        │
+        //    │   1. <Selectable>                                                        │
 
         for (int i = 0; i < items.length; ++i) {
             out += new LineBuilder()

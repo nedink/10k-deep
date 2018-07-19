@@ -1,35 +1,35 @@
-package com.nedink.ui;
+package com.nedink.message;
 
 public abstract class AbstractMessage {
-    public abstract String print();
+    public abstract String getMessage();
 
     public static class LineBuilder {
-        String line = "";
+        StringBuilder line = new StringBuilder();
 
         public LineBuilder add(char c) {
-            line += c;
+            line.append(c);
             return this;
         }
 
         public LineBuilder add(char c, int length) {
             for (int i = 0; i < length; ++i)
-                line += c;
+                line.append(c);
             return this;
         }
 
         public LineBuilder add(String s) {
-            line += s;
+            line.append(s);
             return this;
         }
 
         public LineBuilder add(String s, int length) {
             for (int i = 0; i < length; ++i)
-                line += s;
+                line.append(s);
             return this;
         }
 
         public String build() {
-            return line;
+            return line.toString();
         }
     }
 }
