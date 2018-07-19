@@ -1,6 +1,8 @@
 package com.nedink.message;
 
 public abstract class AbstractMessage {
+    protected StringBuilder message;
+
     public abstract String getMessage();
 
     public static class LineBuilder {

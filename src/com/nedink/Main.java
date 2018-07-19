@@ -1,6 +1,8 @@
 package com.nedink;
 
-import com.nedink.ui.Commands;
+import com.nedink.exception.UnknownCommandException;
+import com.nedink.ui.Command;
+import com.nedink.ui.CommandAction;
 import com.nedink.ui.ConsoleColors;
 import com.nedink.message.HelpMessage;
 import com.nedink.util.Rand;
@@ -45,6 +47,8 @@ public class Main {
     }
 
     private static void prepare() {
+
+        message.append("\n");
 
         // Game state description
 
@@ -95,48 +99,105 @@ public class Main {
 
     private static void processInput() {
 
-        String input;
-        while ((input = scanner.nextLine().trim()).equals("")) {
+        // get line of input
+        String line;
+        while ((line = scanner.nextLine().trim()).equals("")) {
         }
 
-        CommandType commandType = Commands.commandMap.get(input);
-        if (commandType == null) {
-            messageTypeSet.add(MessageType.UNKOWN_COMMAND);
+        // get command
+        Command command;
+        try {
+            command = new Command(line);
+            System.out.println(ConsoleColors.GREEN + "action: " + command.getAction());
+            System.out.println("args: " + Arrays.toString(command.getArgs().toArray()) + ConsoleColors.RESET);
         }
-        else {
-            switch (commandType) {
-                case GO_LEFT: {
-                    if (room.leftChild == null)
-                        room.spawnLeft();
-                    room = room.leftChild;
-                    break;
-                }
-                case GO_RIGHT: {
-                    if (room.rightChild == null)
-                        room.spawnRight();
-                    room = room.rightChild;
-                    break;
-                }
-                case GO_BACK: {
-                    if (room.parent == null) {
-                        messageTypeSet.add(MessageType.NO_PARENT_ROOM);
-                        break;
-                    }
-                    room = room.parent;
-                    break;
-                }
-                case HELP: {
-                    messageTypeSet.add(MessageType.HELP_PAGE);
-                    break;
-                }
-                case QUIT: {
-                    System.exit(1);
-                    break;
-                }
-                default: {
-                    break;
-                }
+        catch (UnknownCommandException e) {
+            messageTypeSet.add(MessageType.UNKOWN_COMMAND);
+            return;
+        }
+
+        CommandAction action = command.getAction();
+        List<String> args = command.getArgs();
+        switch (action) {
+            case QUIT: {
+                System.exit(0);
+                break;
+            }
+            case HELP: {
+                messageTypeSet.add(MessageType.HELP_PAGE);
+                break;
+            }
+            case GO: {
+                if (args.isEmpty())
+                    args = getArgsFor(CommandAction.GO);
+                // read args
+                break;
+            }
+            case TAKE: {
+                // read args
+                break;
             }
         }
+
+//        CommandAction commandType = Commands.commandActionMap.get(input);
+//        if (commandType == null) {
+//            messageTypeSet.add(MessageType.UNKOWN_COMMAND);
+//        }
+//        else {
+//            switch (commandType) {
+//                case GO_LEFT: {
+//                    if (room.leftChild == null)
+//                        room.spawnLeft();
+//                    room = room.leftChild;
+//                    break;
+//                }
+//                case GO_RIGHT: {
+//                    if (room.rightChild == null)
+//                        room.spawnRight();
+//                    room = room.rightChild;
+//                    break;
+//                }
+//                case GO_BACK: {
+//                    if (room.parent == null) {
+//                        messageTypeSet.add(MessageType.NO_PARENT_ROOM);
+//                        break;
+//                    }
+//                    room = room.parent;
+//                    break;
+//                }
+//                case HELP: {
+//                    messageTypeSet.add(MessageType.HELP_PAGE);
+//                    break;
+//                }
+//                case QUIT: {
+//                    System.exit(0);
+//                    break;
+//                }
+//                default: {
+//                    break;
+//                }
+//            }
+//        }
+
+    }
+
+    private static List<String> getArgsFor(CommandAction action) {
+
+        List<String> args = new ArrayList<>();
+
+        switch (action) {
+            case GO: {
+                String arg;
+                while ((arg = scanner.next()) == null || !(arg.equals("left") || arg.equals("right"))) {
+                    if (arg != null) {
+                        System.out.println("");
+                    }
+                }
+                scanner.next();
+            }
+            case TAKE:
+        }
+
+        return args;
     }
 }

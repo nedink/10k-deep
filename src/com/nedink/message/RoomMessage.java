@@ -1,10 +1,10 @@
 package com.nedink.message;
 
-public class HelpMessage extends AbstractMessage {
-
+public class RoomMessage extends AbstractMessage {
     @Override
     public String getMessage() {
-        message.append("HELP PAGE");
+        message.append("");
+
         return message.toString();
     }
 }
