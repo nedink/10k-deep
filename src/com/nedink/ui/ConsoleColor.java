@@ -5,7 +5,7 @@
 
 package com.nedink.ui;
 
-public class ConsoleColors {
+public class ConsoleColor {
     // Reset
     public static final String RESET = "\033[0m";  // Text Reset
 

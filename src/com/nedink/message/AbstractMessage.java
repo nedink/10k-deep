@@ -1,9 +1,9 @@
 package com.nedink.message;
 
 public abstract class AbstractMessage {
-    protected StringBuilder message;
 
-    public abstract String getMessage();
+    @Override
+    public abstract String toString();
 
     public static class LineBuilder {
         StringBuilder line = new StringBuilder();

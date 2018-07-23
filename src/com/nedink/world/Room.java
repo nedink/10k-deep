@@ -9,12 +9,36 @@ import static com.nedink.util.Rand.*;
 
 public class Room implements Serializable {
 
-    public int depth;
-    public boolean isLeft;
-    public Room parent;
-    public Room leftChild;
-    public Room rightChild;
-    public List<Enemy> enemies;
+    private int depth;
+    private boolean isLeft;
+    private Room parent;
+    private Room leftChild;
+    private Room rightChild;
+    private List<Enemy> enemies;
+
+    public int getDepth() {
+        return depth;
+    }
+
+    public boolean isLeft() {
+        return isLeft;
+    }
+
+    public Room getParent() {
+        return parent;
+    }
+
+    public Room getLeftChild() {
+        return leftChild;
+    }
+
+    public Room getRightChild() {
+        return rightChild;
+    }
+
+    public List<Enemy> getEnemies() {
+        return enemies;
+    }
 
     public Room(Room parent, boolean isLeft) {
         this.isLeft = isLeft;

@@ -26,5 +26,10 @@ public final class Chars {
     public static final char BOX_DRAWINGS_LIGHT_VERTICAL_AND_HORIZONTAL = 0x253C;
 
     public static final char BULLET = 0x2022;
+    public static final char STAR_4 = 0x2726;
+    public static final char STAR_5 = 0x2605;
+    public static final char STAR_6 = 0x2736;
+    public static final char STAR_8 = 0x2737;
+    public static final char STAR_12 = 0x2739;
 
 }

@@ -17,7 +17,7 @@ public class Menu extends AbstractMessage {
     }
 
     @Override
-    public String getMessage() {
+    public String toString() {
         String out = "";
 
         //    ┌────────────────────────────────────────────────────────────────────────┐

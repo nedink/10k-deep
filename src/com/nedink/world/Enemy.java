@@ -20,7 +20,7 @@ public class Enemy {
 
         Enemy enemy = new Enemy();
         enemy.room = room;
-        enemy.level = room.depth / 50;
+        enemy.level = room.getDepth() / 50;
 //        enemy.agility =
 
         return enemy;

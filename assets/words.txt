@@ -1,0 +1,26 @@
+destruct
+ruin
+demolish
+defeat
+kill
+overcome
+undo
+unmake
+erase
+noun|syn|end
+noun|syn|terminate
+verb|syn|melt
+verb|syn|wither
+
+verb|syn|evanesense
+verb|syn|languish
+
+verb|syn|fleeting
+verb|syn|degenerate
+verb|syn|deteriorate
+verb|syn|devolve
+verb|syn|disappear
+verb|syn|drop
+verb|syn|go away
+verb|syn|vanish
+verb|syn|weaken

@@ -1,4 +1,4 @@
-package com.nedink.util;
+package com.nedink.lang;
 
 import java.io.BufferedReader;
 import java.io.InputStream;

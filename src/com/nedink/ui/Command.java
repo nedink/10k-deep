@@ -4,18 +4,26 @@ import com.nedink.exception.NoInputException;
 import com.nedink.exception.UnknownCommandException;
 
 import java.util.*;
+import java.util.function.Function;
 
 public class Command {
 
     private static Map<String, CommandAction> commandActionMap;
     private static Map<String, String> aliases;
+    private static Set<CommandAction> supportEmpty;
+
+    public static Set<CommandAction> getSupportEmpty() {
+        return supportEmpty;
+    }
+    //    private static Map<CommandAction, Function<Object, Object>> supportEmpty;
+
 
     private CommandAction action;
     private List<String> args;
 
     //
 
-    public Command(String line) throws NoInputException {
+    public Command(String line) throws RuntimeException {
 
         // parse line
         line = line.toLowerCase();
@@ -35,12 +43,12 @@ public class Command {
 
         CommandAction action = commandActionMap.get(firstWord);
 
-        // unknown command
+        // command unknown
         if (action == null) {
             throw new UnknownCommandException();
         }
 
-        // get action
+        // set action
         this.action = action;
 
         // parse tail
@@ -104,5 +112,12 @@ public class Command {
         aliases.put("l", "go left");
         aliases.put("r", "go right");
         aliases.put("b", "go back");
+    }
+
+    // supports no args
+    static {
+        supportEmpty = new HashSet<>();
+
+        supportEmpty.add(CommandAction.TAKE);
     }
 }

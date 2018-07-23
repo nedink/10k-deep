@@ -9,16 +9,14 @@ public class Player implements Serializable {
     private int level;
     private int pointsToNextLevel;
     private int levelProgress;
-
-    public List<Item> inventory;
+    private List<Item> inventory;
     private float inventoryMaxVolume;
     private float inventoryMaxWeight;
-
-    public WeaponPart[] weaponAttributeSlots;
+    public DamagePart[] weaponSlots;
     private int weaponSlotsAvailable;
 
     public Player() {
-        level = 0;
+        level = 1;
         pointsToNextLevel = 5;
         levelProgress = 0;
         inventoryMaxVolume = 4.0f;
@@ -26,11 +24,11 @@ public class Player implements Serializable {
         inventory = new ArrayList<>();
 
         weaponSlotsAvailable = 1;
-        weaponAttributeSlots = new WeaponPart[]{};
+        weaponSlots = new DamagePart[]{};
 
     }
 
-    public int acquire(Item item) {
+    public int acquireItem(Item item) {
         if (getInventoryVolume() + item.getVolume() > inventoryMaxVolume)
             return 1;
 
@@ -60,7 +58,35 @@ public class Player implements Serializable {
         return weight;
     }
 
-    private static class Inventory {
+    public int getLevel() {
+        return level;
+    }
 
+    public int getPointsToNextLevel() {
+        return pointsToNextLevel;
+    }
+
+    public int getLevelProgress() {
+        return levelProgress;
+    }
+
+    public List<Item> getInventory() {
+        return inventory;
+    }
+
+    public float getInventoryMaxVolume() {
+        return inventoryMaxVolume;
+    }
+
+    public float getInventoryMaxWeight() {
+        return inventoryMaxWeight;
+    }
+
+    public DamagePart[] getWeaponSlots() {
+        return weaponSlots;
+    }
+
+    public int getWeaponSlotsAvailable() {
+        return weaponSlotsAvailable;
     }
 }
