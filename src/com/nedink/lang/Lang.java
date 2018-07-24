@@ -16,27 +16,27 @@ public class Lang {
 
     // count = 10
     private static String[] numbers = {
-            "0","1","2","3","4","5","6","7","8","9"
+            "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"
     };
 
     // count = 26
     private static String[] alphabet = {
-            "a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"
+            "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"
     };
 
     // count = 6
     private static String[] vowels = {
-            "a","e","i","o","u","y"
+            "a", "e", "i", "o", "u", "y"
     };
 
     // count = 20
     private static String[] consonants = {
-            "b","c","d","f","g","h","j","k","l","m","n","p","q","r","s","t","v","w","x","z"
+            "b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "q", "r", "s", "t", "v", "w", "x", "z"
     };
 
     // count = 6
     private static String[] befores = {
-            "b","c","d","f","g","h","j","k","l","m","n","p","q","r","s","t","v","w","x","z",
+            "b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "q", "r", "s", "t", "v", "w", "x", "z",
             "bl", "br",
             "cl", "cr",
             "dr", "dw",
@@ -52,7 +52,7 @@ public class Lang {
     };
 
     private static String[] afters = {
-            "b","c","d","f","g","h","j","k","l","m","n","p","q","r","s","t","v","w","x","z",
+            "b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "q", "r", "s", "t", "v", "w", "x", "z",
             "ch", "ck", "ct",
             "fk", "ft",
             "gh",
@@ -84,17 +84,17 @@ public class Lang {
                 "j",
         };
         String[] vowels = {
-                "o", "u", "ou",
+                "o", "u", "i", "oo",
         };
         String[] afters = {
-                "b","d","f","g","h","j","k","l","m","n","p","q","r","s","t","v","w","x","z",
+                "b", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "q", "r", "s", "t", "v", "w", "x", "z",
 //                "b","c","d","f","g","h","j","k","l","m","n","p","q","r","s","t","v","w","x","z",
 //                "ck", "ct",
-                "ft",
+                "ft", "fk",
                 "gh",
                 "ld", "lg", "lk", "ll", "lm", "ln", "lt",
                 "mn", "mp", "mt",
-                "ng", "nk", "np", "nt", "nx",
+                "ng", "nk", "nt", "nx",
                 "ph", "pt",
                 "rb", "rc", "rf", "rg", "rk", "rl", "rm", "rn", "rp", "rt",
                 "sk", "sp", "st",
@@ -106,17 +106,19 @@ public class Lang {
         double chanceDecreaseAmount = rarity == Rarity.COMMON ? 0.0 : rarity == Rarity.UNCOMMON ? 0.1 : rarity == Rarity.RARE ? 0.5 : rarity == Rarity.EPIC ? 0.7 : rarity == Rarity.LEGENDARY ? 0.95 : 0;
 
         WordGenBuilder wordGenBuilder = new WordGenBuilder()
-                .append(CustomMath.normalizedChances(befores.length, vowels.length)[0], befores)
-                .append(1.0, vowels);
+                .append(CustomMath.normalizedChances(befores.length, vowels.length)[0], befores) // befores
+                .append(1.0, vowels)
+                .append(0.5, afters);
 
         while (rand.nextDouble() < contChance) {
-            wordGenBuilder.append(1.0, vowels)
-                    .append(1.0 - contChance, "'")
-                    .append(0.5, befores)
-                    .append(1.0, vowels);
+            wordGenBuilder.append(1.0 - contChance, "'")
+                    .ifSuccessAppend(0.75, befores)
+                    .ifElseSuccessAppend(0.7, befores, 1.0, vowels)
+                    .append(0.75, afters);
+
             contChance *= chanceDecreaseAmount;
         }
-        wordGenBuilder.append(0.75, afters);
+//        wordGenBuilder.append(0.75, afters);
 
         name = new StringBuilder(wordGenBuilder.toString());
 
@@ -141,27 +143,77 @@ public class Lang {
     private static class WordGenBuilder {
         private StringBuilder wordGen = new StringBuilder();
         private double cumulativeChance = 1.0;
+        private boolean successLast = false;
+
         private WordGenBuilder append(double chance, String phonetic) {
-            if (rand.nextDouble() < chance * cumulativeChance) wordGen.append(phonetic);
+            successLast = false;
+            if (rand.nextDouble() < chance * cumulativeChance) {
+                wordGen.append(phonetic);
+                successLast = true;
+            }
             return this;
         }
+
+        // TODO
         private WordGenBuilder append(double chance, PhoneticClass phoneticClass) {
             return this;
         }
+
         private WordGenBuilder append(double chance, String[]... phoneticsClasses) {
-            int total = 0; for (String[] strings : phoneticsClasses) total += strings.length;
+            successLast = false;
+            int total = 0;
+            for (String[] strings : phoneticsClasses) total += strings.length;
             String[] aggregate = new String[total];
-            int index = 0; for (String[] strings : phoneticsClasses) for (String s : strings) aggregate[index++] = s;
-            if (rand.nextDouble() < chance * cumulativeChance)
+            int index = 0;
+            for (String[] strings : phoneticsClasses) for (String s : strings) aggregate[index++] = s;
+            if (rand.nextDouble() < chance * cumulativeChance) {
                 wordGen.append(aggregate[range(aggregate.length)]);
+                successLast = true;
+            }
             return this;
         }
-        private void cascadeChance(double chance) {
-            cumulativeChance *= chance; setChance(cumulativeChance);
+
+        private WordGenBuilder ifSuccessAppend(double chance, String[]... phoneticClasses) {
+            if (successLast)
+                append(chance, phoneticClasses);
+            return this;
         }
+
+        private WordGenBuilder ifNotSuccessAppend(double chance, String[]... phoneticClasses) {
+            if (!successLast)
+                append(chance, phoneticClasses);
+            return this;
+        }
+
+        private WordGenBuilder ifElseSuccessAppend(double chance1, String[] phoneticClass1, double chance2, String[]... phoneticClass2) {
+            return successLast ? append(chance1, phoneticClass1) : append(chance2, phoneticClass2);
+        }
+
+        private WordGenBuilder ifSuccessSetSuccess(boolean success) {
+            if (successLast)
+                successLast = success;
+            return this;
+        }
+
+        private WordGenBuilder ifNotSuccessSetSuccess(boolean success) {
+            if (!successLast)
+                successLast = success;
+            return this;
+        }
+
+        private WordGenBuilder ifElseSuccessSetSuccess(boolean success1, boolean success2) {
+            successLast = successLast ? success1 : success2; return this;
+        }
+
+        private void cascadeChance(double chance) {
+            cumulativeChance *= chance;
+            setChance(cumulativeChance);
+        }
+
         private void setChance(double chance) {
             cumulativeChance = chance > 1.0 ? 1.0 : chance < 0.0 ? 0.0 : chance;
         }
+
         @Override
         public String toString() {
             return wordGen.toString();
