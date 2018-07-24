@@ -57,13 +57,13 @@ public class Main {
 //            weapon.addPart(damagePart);
 
 
-
+            doTests();
 
 //            System.out.println(weapon);
-            prepareOutput();
-            printOutput();
+//            prepareOutput();
+//            printOutput();
             processInput();
-            progressState();
+//            progressState();
         }
     }
 
@@ -202,6 +202,8 @@ public class Main {
 
     }
 
+
+
     private static void progressState() {
 
     }
@@ -245,11 +247,21 @@ public class Main {
                     break;
             }
             System.out.println(label +
-                               (damageParts[i].getRarity() == Rarity.COMMON ?       "      " + Chars.STAR_5 + " "                                                                                 + "      " :
-                                damageParts[i].getRarity() == Rarity.UNCOMMON ?     "     " + Chars.STAR_5 + " " + Chars.STAR_5 + " "                                                             + "     " :
-                                damageParts[i].getRarity() == Rarity.RARE ?         "    " + Chars.STAR_5 + " " + Chars.STAR_5 + " " + Chars.STAR_5 + " "                                         + "    " :
-                                damageParts[i].getRarity() == Rarity.EPIC ?         "   " + Chars.STAR_5 + " " + Chars.STAR_5 + " " + Chars.STAR_5 + " " + Chars.STAR_5 + " "                     + "   " :
-                                damageParts[i].getRarity() == Rarity.LEGENDARY ?    "  " + Chars.STAR_5 + " " + Chars.STAR_5 + " " + Chars.STAR_5 + " " + Chars.STAR_5 + " " + Chars.STAR_5 + " " + "  " : "") +
+//                               (damageParts[i].getRarity() == Rarity.COMMON ?       "      " + Chars.STAR_5 + " "                                                                                 + "      " :
+//                                damageParts[i].getRarity() == Rarity.UNCOMMON ?     "     " + Chars.STAR_5 + " " + Chars.STAR_5 + " "                                                             + "     " :
+//                                damageParts[i].getRarity() == Rarity.RARE ?         "    " + Chars.STAR_5 + " " + Chars.STAR_5 + " " + Chars.STAR_5 + " "                                         + "    " :
+//                                damageParts[i].getRarity() == Rarity.EPIC ?         "   " + Chars.STAR_5 + " " + Chars.STAR_5 + " " + Chars.STAR_5 + " " + Chars.STAR_5 + " "                     + "   " :
+//                                damageParts[i].getRarity() == Rarity.LEGENDARY ?    "  " + Chars.STAR_5 + " " + Chars.STAR_5 + " " + Chars.STAR_5 + " " + Chars.STAR_5 + " " + Chars.STAR_5 + " " + "  " : "") +
+//                               (damageParts[i].getRarity() == Rarity.COMMON ?       "    - C -     " :
+//                                damageParts[i].getRarity() == Rarity.UNCOMMON ?     "   -= U =-    " :
+//                                damageParts[i].getRarity() == Rarity.RARE ?         "  -=< R >=-   " :
+//                                damageParts[i].getRarity() == Rarity.EPIC ?         " -=<( E )>=-  " :
+//                                damageParts[i].getRarity() == Rarity.LEGENDARY ?    "-=<({ L })>=- " : "") +
+                               (damageParts[i].getRarity() == Rarity.COMMON ?       "  - C -  " :
+                                damageParts[i].getRarity() == Rarity.UNCOMMON ?     "  = U =  " :
+                                damageParts[i].getRarity() == Rarity.RARE ?         "  < R >  " :
+                                damageParts[i].getRarity() == Rarity.EPIC ?         "  ( E )  " :
+                                damageParts[i].getRarity() == Rarity.LEGENDARY ?    "  { L }  " : "") +
                                Lang.generateName(damageParts[i]).toUpperCase() + " " +
                                secondary +
                                damageParts[i].getDamageType() + " " +
