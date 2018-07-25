@@ -214,38 +214,52 @@ public class Main {
         DamagePart[] damageParts = new DamagePart[100];
         DamagePart.DamageType[] types = new DamagePart.DamageType[100];
         Rarity[] rarities = new Rarity[100];
+
         for (int i = 0; i < 100; ++i) {
             damageParts[i] = DamagePart.generate(30);
+        }
+
+        Arrays.sort(damageParts, Comparator.comparing(DamagePart::getRarity));
+
+        for (int i = 0; i < 100; ++i) {
             types[i] = damageParts[i].getDamageType();
             rarities[i] = damageParts[i].getRarity();
             String label;
             String secondary;
+
             switch (damageParts[i].getRarity()) {
                 case COMMON:
-                    label = ConsoleColor.WHITE_BOLD_BRIGHT;
+//                    label = ConsoleColor.WHITE_BOLD_BRIGHT;
+                    label = ConsoleColor.WHITE_BRIGHT;
                     secondary = ConsoleColor.WHITE;
                     break;
                 case UNCOMMON:
-                    label = ConsoleColor.GREEN_BOLD_BRIGHT;
+//                    label = ConsoleColor.GREEN_BOLD_BRIGHT;
+                    label = ConsoleColor.GREEN_BRIGHT;
                     secondary = ConsoleColor.GREEN;
                     break;
                 case RARE:
-                    label = ConsoleColor.CYAN_BOLD_BRIGHT;
+//                    label = ConsoleColor.CYAN_BOLD_BRIGHT;
+                    label = ConsoleColor.CYAN_BRIGHT;
                     secondary = ConsoleColor.CYAN;
                     break;
                 case EPIC:
-                    label = ConsoleColor.PURPLE_BOLD_BRIGHT;
+//                    label = ConsoleColor.PURPLE_BOLD_BRIGHT;
+                    label = ConsoleColor.PURPLE_BRIGHT;
                     secondary = ConsoleColor.PURPLE;
                     break;
                 case LEGENDARY:
-                    label = ConsoleColor.YELLOW_BOLD_BRIGHT;
+//                    label = ConsoleColor.YELLOW_BOLD_BRIGHT;
+                    label = ConsoleColor.YELLOW_BRIGHT;
                     secondary = ConsoleColor.YELLOW;
                     break;
                 default:
-                    label = ConsoleColor.WHITE_BOLD_BRIGHT;
+//                    label = ConsoleColor.WHITE_BOLD_BRIGHT;
+                    label = ConsoleColor.WHITE_BRIGHT;
                     secondary = ConsoleColor.WHITE;
                     break;
             }
+
             System.out.println(label +
 //                               (damageParts[i].getRarity() == Rarity.COMMON ?       "      " + Chars.STAR_5 + " "                                                                                 + "      " :
 //                                damageParts[i].getRarity() == Rarity.UNCOMMON ?     "     " + Chars.STAR_5 + " " + Chars.STAR_5 + " "                                                             + "     " :
@@ -257,17 +271,22 @@ public class Main {
 //                                damageParts[i].getRarity() == Rarity.RARE ?         "  -=< R >=-   " :
 //                                damageParts[i].getRarity() == Rarity.EPIC ?         " -=<( E )>=-  " :
 //                                damageParts[i].getRarity() == Rarity.LEGENDARY ?    "-=<({ L })>=- " : "") +
-                               (damageParts[i].getRarity() == Rarity.COMMON ?       "  - C -  " :
-                                damageParts[i].getRarity() == Rarity.UNCOMMON ?     "  = U =  " :
-                                damageParts[i].getRarity() == Rarity.RARE ?         "  < R >  " :
-                                damageParts[i].getRarity() == Rarity.EPIC ?         "  ( E )  " :
-                                damageParts[i].getRarity() == Rarity.LEGENDARY ?    "  { L }  " : "") +
-                               Lang.generateName(damageParts[i]).toUpperCase() + " " +
-                               secondary +
-                               damageParts[i].getDamageType() + " " +
-                               damageParts[i].getDamage() + " " );
+                               (damageParts[i].getRarity() == Rarity.COMMON ?       "    - C -    " :
+                                damageParts[i].getRarity() == Rarity.UNCOMMON ?     "    = U =    " :
+                                damageParts[i].getRarity() == Rarity.RARE ?         "   -= R =-   " :
+                                damageParts[i].getRarity() == Rarity.EPIC ?         "  -=> E <=-  " :
+                                damageParts[i].getRarity() == Rarity.LEGENDARY ?    " ->){ L }(<- " : "") +
+                               Lang.generateName(damageParts[i]).toUpperCase() + " ");
+
+            System.out.println(
+                    "    - C -    " +
+                    secondary +
+                    damageParts[i].getDamageType() + " " +
+                    damageParts[i].getDamage() + " " );
         }
+
         int[] typeWeights = new int[5];
+
         for (DamagePart.DamageType type : types) {
             switch (type) {
                 case BLUNT:
@@ -287,6 +306,7 @@ public class Main {
                     break;
             }
         }
+
         System.out.println(Arrays.toString(typeWeights));
 
         int[] rarityWeights = new int[5];
@@ -309,6 +329,7 @@ public class Main {
                     break;
             }
         }
+
         System.out.println(Arrays.toString(rarityWeights));
     }
 
