@@ -3,13 +3,16 @@ package com.nedink;
 import com.nedink.exception.UnknownCommandException;
 import com.nedink.lang.Lang;
 import com.nedink.message.UnknownCommandMessage;
-import com.nedink.ui.Chars;
 import com.nedink.ui.Command;
 import com.nedink.ui.CommandAction;
 import com.nedink.ui.ConsoleColor;
 import com.nedink.message.HelpMessage;
 import com.nedink.util.Rand;
 import com.nedink.world.*;
+import com.nedink.world.character.Player;
+import com.nedink.world.item.DamagePart;
+import com.nedink.world.item.Item;
+import com.nedink.world.item.Rarity;
 import com.nedink.world.State;
 
 import java.util.*;
@@ -51,25 +54,24 @@ public class Main {
 
         while (running) {
 
-//            DamagePart damagePart = DamagePart.generate(player.getLevel());
+//            doTests();
 
-//            Item weapon = new Item();
-//            weapon.addPart(damagePart);
+            Item item = new Item();
+            DamagePart damagePart = DamagePart.generate(1);
+            item.addPart(damagePart);
 
+            System.out.println("Generated weapon:");
 
-            doTests();
+            System.out.println(item);
 
-//            System.out.println(weapon);
 //            prepareOutput();
-//            printOutput();
+//            System.out.print(message);
+//            message = new StringBuilder();
             processInput();
-//            progressState();
         }
     }
 
     private static void prepareOutput() {
-
-//        message.append("\n");
 
         // Game state description
 
@@ -85,7 +87,8 @@ public class Main {
                 for (Room room : room.getPath()) {
                     roomPath.append(room.getLeftChild() == null && room.getRightChild() == null ? ConsoleColor.RED :
                                     room.getLeftChild() != null && room.getRightChild() != null ? ConsoleColor.GREEN : ConsoleColor.YELLOW)
-                            .append(room.isLeft() ? "l" : "r")
+                            .append(room.getParent() != null ? "-" : "")
+                            .append(room.isLeft() ? "L" : "R")
                             .append(ConsoleColor.RESET);
                 }
                 message.append("You are in room ").append(roomPath)
@@ -112,11 +115,6 @@ public class Main {
             }
         }
 
-    }
-
-    private static void printOutput() {
-        System.out.print(message);
-        message = new StringBuilder();
     }
 
     private static void processInput() {
@@ -159,11 +157,22 @@ public class Main {
                 accept.add("back");
                 switch (args.get(0)) {
                     case "left":
-                        room = room.spawnLeft();
+                        if (room.getLeftChild() == null)
+                            room.spawnLeft();
+                        room = room.getLeftChild();
                         break;
                     case "right":
+                        if (room.getRightChild() == null)
+                            room.spawnRight();
+                        room = room.getRightChild();
                         break;
                     case "back":
+                        if (room.getParent() == null) {
+                            // handle no parent
+                            message.append("This room has no parent.\n");
+                            break;
+                        }
+                        room = room.getParent();
                         break;
                 }
                 for (String s : args) {
@@ -199,12 +208,6 @@ public class Main {
 
         System.out.println(ConsoleColor.GREEN + "action: " + action);
         System.out.println("args: " + Arrays.toString(args.toArray()) + ConsoleColor.RESET);
-
-    }
-
-
-
-    private static void progressState() {
 
     }
 

@@ -1,8 +1,8 @@
 package com.nedink.lang;
 
 import com.nedink.util.CustomMath;
-import com.nedink.world.DamagePart;
-import com.nedink.world.Rarity;
+import com.nedink.world.item.DamagePart;
+import com.nedink.world.item.Rarity;
 
 import static com.nedink.util.Rand.rand;
 import static com.nedink.util.Rand.range;

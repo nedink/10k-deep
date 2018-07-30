@@ -1,4 +1,7 @@
-package com.nedink.world;
+package com.nedink.world.character;
+
+import com.nedink.world.item.Item;
+import com.nedink.world.Room;
 
 import java.util.List;
 

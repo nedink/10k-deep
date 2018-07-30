@@ -1,16 +1,14 @@
-package com.nedink.world;
+package com.nedink.world.item;
 
 import com.nedink.lang.Named;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class Item implements Named {
 
     private List<ItemPart> parts;
-
     private String name;
+
     public Item() {
         parts = new ArrayList<>();
         name = "";
@@ -53,11 +51,25 @@ public class Item implements Named {
         return null;
     }
 
+    public Set<ItemType> getTypes() {
+        Set<ItemType> types = new HashSet<>();
+
+        for (ItemPart part : parts) {
+            if (part instanceof DamagePart)
+                types.add(ItemType.WEAPON);
+        }
+
+        return types;
+    }
+
     @Override
     public String toString() {
-        return "Item{" +
-               "parts=" + Arrays.toString(parts.toArray()) +
-               ", name='" + name + '\'' +
-               '}';
+        return "parts: " + Arrays.toString(parts.toArray()) + '\n' +
+               "name: '" + name + '\'' + '\n' +
+               "";
+    }
+
+    public enum ItemType {
+        WEAPON,
     }
 }

@@ -1,18 +1,52 @@
-package com.nedink.world;
+package com.nedink.world.item;
 
 import com.nedink.lang.Named;
+import com.nedink.world.character.Race;
 
 import static com.nedink.util.Rand.rand;
-import static com.nedink.world.Rarity.*;
-import static com.nedink.world.Rarity.LEGENDARY;
+import static com.nedink.world.item.Rarity.*;
+import static com.nedink.world.item.Rarity.LEGENDARY;
 
 public abstract class ItemPart implements Named {
 
-    private Item item;
+    protected Item item;
     protected int level;
+    protected Race race;
     protected Rarity rarity;
     protected double volume;
     protected double weight;
+
+    public Item getItem() {
+        return item;
+    }
+
+    public void setItem(Item item) {
+        this.item = item;
+    }
+
+    public double getVolume() {
+        return volume;
+    }
+
+    public void setVolume(double volume) {
+        this.volume = volume;
+    }
+
+    public double getWeight() {
+        return weight;
+    }
+
+    public void setWeight(double weight) {
+        this.weight = weight;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
 
     protected void initRarity() {
 
@@ -50,43 +84,15 @@ public abstract class ItemPart implements Named {
             rarity = LEGENDARY;
     }
 
-    public Item getItem() {
-        return item;
-    }
-    public void setItem(Item item) {
-        this.item = item;
-    }
-
-    public double getVolume() {
-        return volume;
-    }
-
-    public void setVolume(double volume) {
-        this.volume = volume;
-    }
-
-    public double getWeight() {
-        return weight;
-    }
-
-    public void setWeight(double weight) {
-        this.weight = weight;
-    }
-
-    public int getLevel() {
-        return level;
-    }
-
-    public void setLevel(int level) {
-        this.level = level;
+    protected void initRace() {
+        race = Race.BLUMKRUUL;
     }
 
     @Override
     public String toString() {
-        return "ItemPart{" +
-               "level=" + level +
-               ", volume=" + volume +
-               ", weight=" + weight +
-               '}';
+        return "\n- level: " + level + '\n' +
+               "  volume: " + volume + '\n' +
+               "  weight: " + weight + '\n'
+                ;
     }
 }

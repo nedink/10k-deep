@@ -1,12 +1,9 @@
-package com.nedink.world;
+package com.nedink.world.item;
 
-import sun.misc.Cleaner;
-
-import java.util.Arrays;
-import java.util.List;
+import com.nedink.ui.ConsoleColor;
 
 import static com.nedink.util.Rand.*;
-import static com.nedink.world.Rarity.*;
+import static com.nedink.world.item.Rarity.*;
 
 public class DamagePart extends ItemPart {
 
@@ -70,11 +67,23 @@ public class DamagePart extends ItemPart {
         DamagePart part = new DamagePart();
         part.level = level;
 
+        //
+
         part.initRarity();
+
+        part.initRace();
+
+        //
 
         part.initDamageType();
 
+        part.initWeight();
+
+        part.initVolume();
+
         part.initBaseDamage();
+
+        //
 
         return part;
     }
@@ -82,16 +91,33 @@ public class DamagePart extends ItemPart {
     private void initDamageType() {
         double damageTypeRoll = rand.nextDouble();
         DamageType[] damageTypes = DamageType.values();
-        double[] damageTypeWeights = {
-                4.0,    // blunt
-                3.0,    // cleaving
-                2.0,    // penetrative
-                1.0,    // lacerative
-                0.5     // explosive
-        };
+        double[] damageTypeWeights;
 
-        damageType = DamageType.BLUNT;
+        // weight for race
+        switch (race) {
+            case BLUMKRUUL: {
+                damageTypeWeights = new double[]{
+                        4.0,    // blunt
+                        3.0,    // cleaving
+                        2.0,    // penetrative
+                        1.0,    // lacerative
+                        0.5     // explosive
+                };
+                break;
+            }
+            default: {
+                damageTypeWeights = new double[]{
+                        1.0,    // blunt
+                        1.0,    // cleaving
+                        1.0,    // penetrative
+                        1.0,    // lacerative
+                        1.0     // explosive
+                };
+                break;
+            }
+        }
 
+        // weight for rarity
         if (rarity == COMMON || rarity == UNCOMMON) {
             // chose from only the basic types
             double total = 0;
@@ -105,18 +131,38 @@ public class DamagePart extends ItemPart {
                 damageTypeWeights[i] = cumulative += damageTypeWeights[i] /= total;
             }
 
-            if (damageTypeRoll > damageTypeWeights[0])
-                damageType = DamageType.CLEAVING;
-            if (damageTypeRoll > damageTypeWeights[1])
-                damageType = DamageType.PENETRATIVE;
-            if (damageTypeRoll > damageTypeWeights[2])
-                damageType = DamageType.LACERATIVE;
-            if (damageTypeRoll > damageTypeWeights[3])
-                damageType = DamageType.EXPLOSIVE;
         }
         else {
-            // TODO: implement rolls for other damage types
+            // TODO: implement rolls for other rarities types
         }
+
+        damageType = DamageType.BLUNT;
+        if (damageTypeRoll > damageTypeWeights[0])
+            damageType = DamageType.CLEAVING;
+        if (damageTypeRoll > damageTypeWeights[1])
+            damageType = DamageType.PENETRATIVE;
+        if (damageTypeRoll > damageTypeWeights[2])
+            damageType = DamageType.LACERATIVE;
+        if (damageTypeRoll > damageTypeWeights[3])
+            damageType = DamageType.EXPLOSIVE;
+    }
+
+    private void initWeight() {
+        // - RACE: BLUMKRUUL
+        // BLUNT,          // +
+        // CLEAVING,       // =
+        // PENETRATIVE,    // -
+        // LACERATIVE,     // -
+        // EXPLOSIVE,      // *
+
+    }
+
+    private void initVolume() {
+        // BLUNT,          // +
+        // CLEAVING,       // =
+        // PENETRATIVE,    // =
+        // LACERATIVE,     // -
+        // EXPLOSIVE,      // *
     }
 
     private void initBaseDamage() {
@@ -137,6 +183,16 @@ public class DamagePart extends ItemPart {
         this.baseDamage = damage;
     }
 
+    @Override
+    public String toString() {
+        return super.toString() +
+                Rarity.getColor(rarity) + "> " + rarity + ConsoleColor.RESET + '\n' +
+                "  " + damageType + '\n' +
+                "  damage: " + (int)baseDamage + '\n' +
+                "  " +
+                "";
+    }
+
     public enum DamageType {
 
         // common +
@@ -145,6 +201,7 @@ public class DamagePart extends ItemPart {
         PENETRATIVE,    // 2 parts
         LACERATIVE,     // 1 part       // somewhat uncommon
         EXPLOSIVE,      // 0.5 parts    // most uncommon // generally more suited for greater range except when on melee
+
 
         // rare +
         BURNING,

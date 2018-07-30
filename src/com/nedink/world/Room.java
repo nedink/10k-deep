@@ -1,5 +1,7 @@
 package com.nedink.world;
 
+import com.nedink.world.character.Enemy;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
