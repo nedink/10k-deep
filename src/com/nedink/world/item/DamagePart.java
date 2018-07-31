@@ -1,6 +1,10 @@
 package com.nedink.world.item;
 
 import com.nedink.ui.ConsoleColor;
+import com.nedink.world.BonusChance;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.nedink.util.Rand.*;
 import static com.nedink.world.item.Rarity.*;
@@ -49,8 +53,8 @@ public class DamagePart extends ItemPart {
         return baseDamage;
     }
 
-    public int getDamage() {
-        return (int) baseDamage;
+    public double getDamage() {
+        return 10 + Math.pow(baseDamage, level);
     }
 
     public String getSerialCode() {
@@ -155,6 +159,22 @@ public class DamagePart extends ItemPart {
         // LACERATIVE,     // -
         // EXPLOSIVE,      // *
 
+        switch (race) {
+            case BLUMKRUUL: {
+                switch (damageType) {
+                    case BLUNT: {
+                        break;
+                    }
+                    default: {
+                        break;
+                    }
+                }
+                break;
+            }
+            default: {
+                break;
+            }
+        }
     }
 
     private void initVolume() {
@@ -168,17 +188,39 @@ public class DamagePart extends ItemPart {
     private void initBaseDamage() {
         double damageRoll = rand.nextDouble();
 
-        double damage = level * 10;
+        // minimum damage
+        double damage = 1.5;
 
-        Rarity[] rarities = Rarity.values();
-        for (int i = 0; i < rarities.length; ++i) {
-            double rarityBonus = rand.nextDouble();
-            if (rarities[i].equals(rarity)) {
-                damage += (i * (2 + (level / 5))) * rarityBonus;
+        // bonuses
+        List<BonusChance> bonusChances = new ArrayList<>();
+
+        // rarity
+        switch (rarity) {
+            case COMMON: {
+                bonusChances.add(new BonusChance(0.1, 0.001));
+                break;
             }
+            default:
+                break;
         }
 
-        damage += (2 + level / 5.0) * (damageRoll - 0.5);
+        // race -> damage type
+        switch (race) {
+            case BLUMKRUUL: {
+                switch (damageType) {
+                    case BLUNT: {
+                        bonusChances.add(new BonusChance(1.0, 0.001));
+                        break;
+                    }
+                    default:
+                        break;
+                }
+                break;
+            }
+            default:
+                break;
+        }
+
 
         this.baseDamage = damage;
     }
