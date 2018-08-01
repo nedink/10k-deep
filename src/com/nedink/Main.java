@@ -2,18 +2,18 @@ package com.nedink;
 
 import com.nedink.exception.UnknownCommandException;
 import com.nedink.lang.Lang;
+import com.nedink.message.HelpMessage;
 import com.nedink.message.UnknownCommandMessage;
 import com.nedink.ui.Command;
 import com.nedink.ui.CommandAction;
 import com.nedink.ui.ConsoleColor;
-import com.nedink.message.HelpMessage;
 import com.nedink.util.Rand;
-import com.nedink.world.*;
+import com.nedink.world.Room;
+import com.nedink.world.State;
 import com.nedink.world.character.Player;
 import com.nedink.world.item.DamagePart;
 import com.nedink.world.item.Item;
 import com.nedink.world.item.Rarity;
-import com.nedink.world.State;
 
 import java.util.*;
 
@@ -36,8 +36,7 @@ public class Main {
         if (args.length > 0) {
             try {
                 Rand.rand.setSeed(Long.valueOf(args[0]));
-            }
-            catch (NumberFormatException e) {
+            } catch (NumberFormatException e) {
                 System.out.println(ConsoleColor.RED + "ERROR Invalid Seed" + ConsoleColor.RESET);
                 System.exit(1);
             }
@@ -57,17 +56,41 @@ public class Main {
 //            doTests();
 
             Item item = new Item();
-            DamagePart damagePart = DamagePart.generate(1);
+            DamagePart damagePart;
+
+            String line = scanner.nextLine();
+            if (line.equals("q")) System.exit(0); // for testing
+            try { damagePart = DamagePart.generate(Math.max(Integer.valueOf(line), 1)); } catch (NumberFormatException e) { damagePart = DamagePart.generate(1); }
+
             item.addPart(damagePart);
 
+            System.out.print(damagePart.getRarity() == Rarity.COMMON ? ConsoleColor.WHITE_BRIGHT :
+                    damagePart.getRarity() == Rarity.UNCOMMON ? ConsoleColor.GREEN_BRIGHT :
+                            damagePart.getRarity() == Rarity.RARE ? ConsoleColor.CYAN_BRIGHT :
+                                    damagePart.getRarity() == Rarity.EPIC ? ConsoleColor.PURPLE_BRIGHT :
+                                            damagePart.getRarity() == Rarity.LEGENDARY ? ConsoleColor.YELLOW_BRIGHT : "");
             System.out.println("Generated weapon:");
 
-            System.out.println(item);
+//            System.out.println("  name: " + item.getPart(0).getName());
+//            System.out.println("  volume: " + item.getVolume() + " units");
+//            System.out.println("  weight: " + item.getWeight() + " kg");
+
+            System.out.print("  damage: [");
+            if (((DamagePart) item.getPart(0)).getDamage() < 100) {
+                for (int i = 0; i < ((DamagePart) item.getPart(0)).getDamage(); ++i)
+                    System.out.print('=');
+            }
+            else
+                System.out.print(" " + ((DamagePart) item.getPart(0)).getDamage());
+            System.out.print('\n');
+
+            System.out.print(ConsoleColor.RESET);
+//            System.out.println("  damage: " + item.get() + " kg");
 
 //            prepareOutput();
 //            System.out.print(message);
 //            message = new StringBuilder();
-            processInput();
+//            processInput();
         }
     }
 
@@ -86,7 +109,7 @@ public class Main {
                 StringBuilder roomPath = new StringBuilder();
                 for (Room room : room.getPath()) {
                     roomPath.append(room.getLeftChild() == null && room.getRightChild() == null ? ConsoleColor.RED :
-                                    room.getLeftChild() != null && room.getRightChild() != null ? ConsoleColor.GREEN : ConsoleColor.YELLOW)
+                            room.getLeftChild() != null && room.getRightChild() != null ? ConsoleColor.GREEN : ConsoleColor.YELLOW)
                             .append(room.getParent() != null ? "-" : "")
                             .append(room.isLeft() ? "L" : "R")
                             .append(ConsoleColor.RESET);
@@ -129,8 +152,7 @@ public class Main {
         // input -> command
         try {
             command = new Command(line);
-        }
-        catch (UnknownCommandException e) {
+        } catch (UnknownCommandException e) {
             message.append(new UnknownCommandMessage());
             return;
         }
@@ -212,7 +234,6 @@ public class Main {
     }
 
 
-
     private static void doTests() {
         DamagePart[] damageParts = new DamagePart[100];
         DamagePart.DamageType[] types = new DamagePart.DamageType[100];
@@ -274,18 +295,18 @@ public class Main {
 //                                damageParts[i].getRarity() == Rarity.RARE ?         "  -=< R >=-   " :
 //                                damageParts[i].getRarity() == Rarity.EPIC ?         " -=<( E )>=-  " :
 //                                damageParts[i].getRarity() == Rarity.LEGENDARY ?    "-=<({ L })>=- " : "") +
-                               (damageParts[i].getRarity() == Rarity.COMMON ?       "    - C -    " :
-                                damageParts[i].getRarity() == Rarity.UNCOMMON ?     "    = U =    " :
-                                damageParts[i].getRarity() == Rarity.RARE ?         "   -= R =-   " :
-                                damageParts[i].getRarity() == Rarity.EPIC ?         "  -=> E <=-  " :
-                                damageParts[i].getRarity() == Rarity.LEGENDARY ?    " ->){ L }(<- " : "") +
-                               Lang.generateName(damageParts[i]).toUpperCase() + " ");
+                    (damageParts[i].getRarity() == Rarity.COMMON ? "    - C -    " :
+                            damageParts[i].getRarity() == Rarity.UNCOMMON ? "    = U =    " :
+                                    damageParts[i].getRarity() == Rarity.RARE ? "   -= R =-   " :
+                                            damageParts[i].getRarity() == Rarity.EPIC ? "  -=> E <=-  " :
+                                                    damageParts[i].getRarity() == Rarity.LEGENDARY ? " ->){ L }(<- " : "") +
+                    Lang.generateName(damageParts[i]).toUpperCase() + " ");
 
             System.out.println(
                     "    - C -    " +
-                    secondary +
-                    damageParts[i].getDamageType() + " " +
-                    damageParts[i].getDamage() + " " );
+                            secondary +
+                            damageParts[i].getDamageType() + " " +
+                            damageParts[i].getDamage() + " ");
         }
 
         int[] typeWeights = new int[5];

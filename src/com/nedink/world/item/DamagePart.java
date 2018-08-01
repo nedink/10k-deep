@@ -1,7 +1,8 @@
 package com.nedink.world.item;
 
+import com.nedink.lang.Lang;
 import com.nedink.ui.ConsoleColor;
-import com.nedink.world.BonusChance;
+import com.nedink.world.ChanceValue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +26,7 @@ public class DamagePart extends ItemPart {
     private double baseRangeMax;
     private double baseAccuracy;
     private double baseDamage;
+    private List<Double> damageModifiers;
     private String serialCode;
     private String name;
 
@@ -49,12 +51,14 @@ public class DamagePart extends ItemPart {
         return baseAccuracy;
     }
 
-    public double getBaseDamage() {
-        return baseDamage;
-    }
-
-    public double getDamage() {
-        return 10 + Math.pow(baseDamage, level);
+    public int getDamage() {
+        double levelDamage = 10 + Math.pow(1.5, level);
+        double baseDamage = levelDamage;
+        double total = baseDamage;
+        for (Double d : damageModifiers) {
+            total += baseDamage * d;
+        }
+        return (int) Math.round(total);
     }
 
     public String getSerialCode() {
@@ -85,11 +89,19 @@ public class DamagePart extends ItemPart {
 
         part.initVolume();
 
-        part.initBaseDamage();
+        part.initDamageMod();
+
+        //
+
+        part.initName();
 
         //
 
         return part;
+    }
+
+    protected void initName() {
+        name = Lang.generateName(this);
     }
 
     private void initDamageType() {
@@ -153,76 +165,90 @@ public class DamagePart extends ItemPart {
 
     private void initWeight() {
         // - RACE: BLUMKRUUL
-        // BLUNT,          // +
-        // CLEAVING,       // =
-        // PENETRATIVE,    // -
-        // LACERATIVE,     // -
-        // EXPLOSIVE,      // *
+        // ++
 
+        double baseWeight = 10.0; // kg
+
+        double weightModifier = 0.0;
+
+        // race
         switch (race) {
             case BLUMKRUUL: {
-                switch (damageType) {
-                    case BLUNT: {
-                        break;
-                    }
-                    default: {
-                        break;
-                    }
-                }
+                weightModifier += 0.20; // 20 %
                 break;
             }
             default: {
                 break;
             }
         }
+
+        weight = baseWeight + baseWeight * weightModifier;
     }
 
     private void initVolume() {
-        // BLUNT,          // +
-        // CLEAVING,       // =
-        // PENETRATIVE,    // =
-        // LACERATIVE,     // -
-        // EXPLOSIVE,      // *
+        // - RACE: BLUMKRUUL
+        // ++
+
+        double baseVolume = 1.0; // units
+
+        double volumeModifier = 0.0;
+
+        // race
+        switch (race) {
+            case BLUMKRUUL: {
+                volumeModifier += 0.20; // 20 %
+                break;
+            }
+            default: {
+                break;
+            }
+        }
+
+        volume = baseVolume + baseVolume * volumeModifier;
     }
 
-    private void initBaseDamage() {
-        double damageRoll = rand.nextDouble();
-
-        // minimum damage
-        double damage = 1.5;
+    private void initDamageMod() {
 
         // bonuses
-        List<BonusChance> bonusChances = new ArrayList<>();
+        List<ChanceValue> bonusChances = new ArrayList<>();
+
+        // modifiers
+        damageModifiers = new ArrayList<>();
 
         // rarity
         switch (rarity) {
             case COMMON: {
-                bonusChances.add(new BonusChance(0.1, 0.001));
+                damageModifiers.add(range(0.00, 0.05)); // 0 - 5 %
+                break;
+            }
+            case UNCOMMON: {
+                damageModifiers.add(range(0.05, 0.10)); // 10 - 20 %
+                break;
+            }
+            case RARE: {
+                damageModifiers.add(range(0.10, 0.15)); // 10 - 15 %
+                break;
+            }
+            case EPIC: {
+                damageModifiers.add(range(0.20, 0.25)); // 20 - 25 %
+                break;
+            }
+            case LEGENDARY: {
+                damageModifiers.add(range(0.40, 0.50)); // 40 - 50 %
                 break;
             }
             default:
                 break;
         }
 
-        // race -> damage type
+        // race
         switch (race) {
             case BLUMKRUUL: {
-                switch (damageType) {
-                    case BLUNT: {
-                        bonusChances.add(new BonusChance(1.0, 0.001));
-                        break;
-                    }
-                    default:
-                        break;
-                }
-                break;
+                damageModifiers.add(range(0.30, 0.30)); // 30 %
             }
             default:
                 break;
         }
-
-
-        this.baseDamage = damage;
     }
 
     @Override
