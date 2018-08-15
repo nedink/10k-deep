@@ -1,0 +1,20 @@
+TERRAIN:
+- BLUNT
+    - rock
+    - heavy log
+    -
+
+
+---
+BLUMKRUUL:
+- BLUNT
+    - club
+    - stick
+    - hammer
+- CLEAVING
+    - axe
+    - cleaver
+- IMPALING
+    - steak
+- LACERATING
+    -
