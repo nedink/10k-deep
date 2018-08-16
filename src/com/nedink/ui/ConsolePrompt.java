@@ -25,17 +25,21 @@ package com.nedink.ui;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OutputBuffer {
+public class ConsolePrompt {
 
     private static final int HEIGHT = 32;
 
     private List<String> mainMessage;
     private Menu menu;
+    private String inputLine;
+
     private int advanceSpace;
 
-    public OutputBuffer() {
+    public ConsolePrompt() {
         mainMessage = new ArrayList<>();
         menu = new Menu();
+        inputLine = "> ";
+
         advanceSpace = HEIGHT;
     }
 
@@ -50,10 +54,25 @@ public class OutputBuffer {
         advanceSpace += mainMessage.size();
         advanceSpace += menu.outputHeight();
 
+        // main message
         for (String line : mainMessage) {
-
+            output.append(line).append('\n');
         }
 
+        // menu
+        output.append(menu);
+
+        output.append('\n');
+
+        // input line
+        output.append(inputLine);
+
         System.out.print(output);
+    }
+
+    // ------------------------------------
+
+    public List<String> getMainMessage() {
+        return mainMessage;
     }
 }

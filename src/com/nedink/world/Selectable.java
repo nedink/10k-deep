@@ -1,4 +1,5 @@
 package com.nedink.world;
 
-public class Selectable {
+public interface Selectable {
+    String selectableName();
 }

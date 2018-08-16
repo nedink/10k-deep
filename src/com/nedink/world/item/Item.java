@@ -1,10 +1,11 @@
 package com.nedink.world.item;
 
-import com.nedink.lang.Named;
+import com.nedink.world.Named;
+import com.nedink.world.Selectable;
 
 import java.util.*;
 
-public class Item implements Named {
+public class Item implements Named, Selectable {
 
     private List<ItemPart> parts;
     private String name;
@@ -48,7 +49,13 @@ public class Item implements Named {
 
     @Override
     public String getName() {
-        return null;
+        String name = "";
+        for (ItemPart part : parts) { // concatenate names of parts
+            name += part.getName();
+            name += " ";
+        }
+        name = name.substring(0, name.length() - 1); // remove space at end
+        return name;
     }
 
     public Set<ItemType> getTypes() {
@@ -60,6 +67,11 @@ public class Item implements Named {
         }
 
         return types;
+    }
+
+    @Override
+    public String selectableName() {
+        return getName();
     }
 
     @Override

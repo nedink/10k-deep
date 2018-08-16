@@ -26,14 +26,6 @@ public class Player extends Character implements Serializable {
         return level;
     }
 
-    public int getPointsToNextLevel() {
-        return pointsToNextLevel;
-    }
-
-    public int getLevelProgress() {
-        return levelProgress;
-    }
-
     public List<Item> getInventory() {
         return inventory;
     }

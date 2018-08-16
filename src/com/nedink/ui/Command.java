@@ -31,7 +31,7 @@ public class Command {
         String firstWord;
         String tail;
 
-        firstWord = firstScanner.hasNext() ? firstScanner.next() : null;
+        firstWord = firstScanner.hasNext() ? firstScanner.next() : "";
         tail = firstScanner.hasNextLine() ? firstScanner.nextLine().trim() : "";
 
         // expand alias
@@ -88,6 +88,9 @@ public class Command {
     // commands
     static {
         commandActionMap = new HashMap<>();
+
+        // enter
+        commandActionMap.put("", CommandAction.ENTER);
 
         // help
         commandActionMap.put("help", CommandAction.HELP);

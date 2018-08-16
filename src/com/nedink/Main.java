@@ -7,6 +7,7 @@ import com.nedink.message.UnknownCommandMessage;
 import com.nedink.ui.Command;
 import com.nedink.ui.CommandAction;
 import com.nedink.ui.ConsoleColor;
+import com.nedink.ui.ConsolePrompt;
 import com.nedink.util.Rand;
 import com.nedink.world.Room;
 import com.nedink.world.State;
@@ -15,8 +16,15 @@ import com.nedink.world.item.DamagePart;
 import com.nedink.world.item.Item;
 import com.nedink.world.item.Rarity;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.lang.management.RuntimeMXBean;
 import java.util.*;
 
+import static com.nedink.world.State.COMBAT;
+import static com.nedink.world.State.HOSTILES_APPEAR;
 import static com.nedink.world.State.ROOM;
 
 public class Main {
@@ -25,7 +33,9 @@ public class Main {
     private static Player player;
     private static Room room;
     private static Scanner scanner;
+    private static Command command;
     private static StringBuilder message;
+    private static ConsolePrompt consolePrompt;
     private static State state;
 //    private static List<String> commandBuffer;
 
@@ -49,126 +59,214 @@ public class Main {
         state = ROOM;
 //        commandBuffer = new ArrayList<>();
 
+        Item item1 = new Item();
+        Item item2 = new Item();
+        Item item3 = new Item();
+        item1.addPart(DamagePart.generate(room.getDepth()));
+        item2.addPart(DamagePart.generate(room.getDepth()));
+        item3.addPart(DamagePart.generate(room.getDepth()));
+        room.addItem(item1);
+        room.addItem(item2);
+        room.addItem(item3);
+
         scanner = new Scanner(System.in);
 
+        /* --------- MAIN LOOP BEGIN --------- */
         while (running) {
 
+            /* --------- TESTS BEGIN --------- */
+            if (false) {
 //            doTests();
 
-            Item item = new Item();
-            DamagePart damagePart;
+                Item item = new Item();
+                DamagePart damagePart;
 
-            String line = scanner.nextLine();
-            if (line.equals("q")) System.exit(0); // for testing
-            try { damagePart = DamagePart.generate(Math.max(Integer.valueOf(line), 1)); } catch (NumberFormatException e) { damagePart = DamagePart.generate(1); }
+                String line = scanner.nextLine();
+                if (line.equals("q")) System.exit(0); // for testing
+                try {
+                    damagePart = DamagePart.generate(Math.max(Integer.valueOf(line), room.getDepth()));
+                } catch (NumberFormatException e) {
+                    damagePart = DamagePart.generate(1);
+                }
 
-            item.addPart(damagePart);
+                item.addPart(damagePart);
 
-            System.out.print(damagePart.getRarity() == Rarity.COMMON ? ConsoleColor.WHITE_BRIGHT :
-                    damagePart.getRarity() == Rarity.UNCOMMON ? ConsoleColor.GREEN_BRIGHT :
-                            damagePart.getRarity() == Rarity.RARE ? ConsoleColor.CYAN_BRIGHT :
-                                    damagePart.getRarity() == Rarity.EPIC ? ConsoleColor.PURPLE_BRIGHT :
-                                            damagePart.getRarity() == Rarity.LEGENDARY ? ConsoleColor.YELLOW_BRIGHT : "");
-            System.out.println("Generated weapon:");
+                System.out.print(damagePart.getRarity() == Rarity.COMMON ? ConsoleColor.WHITE_BRIGHT :
+                        damagePart.getRarity() == Rarity.UNCOMMON ? ConsoleColor.GREEN_BRIGHT :
+                                damagePart.getRarity() == Rarity.RARE ? ConsoleColor.CYAN_BRIGHT :
+                                        damagePart.getRarity() == Rarity.EPIC ? ConsoleColor.PURPLE_BRIGHT :
+                                                damagePart.getRarity() == Rarity.LEGENDARY ? ConsoleColor.YELLOW_BRIGHT : "");
+                System.out.println("Generated weapon:");
 
 //            System.out.println("  name: " + item.getPart(0).getName());
 //            System.out.println("  volume: " + item.getVolume() + " units");
 //            System.out.println("  weight: " + item.getWeight() + " kg");
 
-            System.out.print("  damage: [");
-            if (((DamagePart) item.getPart(0)).getDamage() < 100) {
-                for (int i = 0; i < ((DamagePart) item.getPart(0)).getDamage(); ++i)
-                    System.out.print('=');
-            }
-            else
-                System.out.print(" " + ((DamagePart) item.getPart(0)).getDamage());
-            System.out.print('\n');
+                System.out.print("race: " + item.getPart(0).getRace() + '\n');
+                System.out.print("  damage: [");
+                if (((DamagePart) item.getPart(0)).getDamage() < 100) {
+                    for (int i = 0; i < ((DamagePart) item.getPart(0)).getDamage(); ++i)
+                        System.out.print('=');
+                } else System.out.print("" + " " + ((DamagePart) item.getPart(0)).getDamage());
 
-            System.out.print(ConsoleColor.RESET);
+                System.out.print('\n');
+                System.out.print(ConsoleColor.RESET);
 //            System.out.println("  damage: " + item.get() + " kg");
+            }
 
-//            prepareOutput();
-//            System.out.print(message);
-//            message = new StringBuilder();
-//            processInput();
+            if (false) {
+                File file = new File("assets/ui.txt");
+                try {
+                    BufferedReader reader = new BufferedReader(new FileReader(file));
+                    reader.lines().forEach(System.out::println);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+            /* --------- TESTS END --------- */
+
+
+
+            /* --------- PRODUCTION BEGIN --------- */
+            if (true)
+            {
+                switchState();
+                prepareOutput();
+                displayOutput();
+                getInput();
+                processCommand();
+            }
+            /* --------- PRODUCTION END --------- */
+
+        }
+        /* --------- MAIN LOOP END --------- */
+    }
+
+    private static void switchState() {
+
+        switch (state) {
+
+            case ROOM: {
+                // if enemies, go to combat
+                if (!room.getEnemies().isEmpty()) {
+                    state = HOSTILES_APPEAR;
+                    break;
+                }
+            } break;
+
+            case COMBAT: {
+                // if no enemies, exit to room
+                if (room.getEnemies().isEmpty()) {
+                    state = ROOM;
+                    break;
+                }
+            } break;
+
+
+
+            default:
+                break;
         }
     }
 
     private static void prepareOutput() {
+
+        // reset
+        consolePrompt = new ConsolePrompt();
 
         // Game state description
 
         switch (state) {
 
             case CUTSCENE: {
+                // ONLY OUTPUT. NO INPUT IS CONSIDERED; PRESSING 'ENTER' MOVES CUTSCENE ALONG.
 
             }
+            break;
 
             case ROOM: {
-                // printOutput room description stuff
-                StringBuilder roomPath = new StringBuilder();
-                for (Room room : room.getPath()) {
-                    roomPath.append(room.getLeftChild() == null && room.getRightChild() == null ? ConsoleColor.RED :
-                            room.getLeftChild() != null && room.getRightChild() != null ? ConsoleColor.GREEN : ConsoleColor.YELLOW)
-                            .append(room.getParent() != null ? "-" : "")
-                            .append(room.isLeft() ? "L" : "R")
-                            .append(ConsoleColor.RESET);
-                }
-                message.append("You are in room ").append(roomPath)
-                        .append("\n");
+
+                // room description
+                consolePrompt.getMainMessage().add("You are in room " + room.getPathString());
+
+//                message.append("You are in room ")
+//                        .append(room.getPathString())
+//                        .append('\n');
+
+                consolePrompt.getMainMessage().add("");
 
                 // enemies
-                message.append("enemies: ");
-                int enemies = 0;
+                if (!room.getEnemies().isEmpty()) {
+                    // enter fight!
 
-                for (int i = 0; i < room.getEnemies().size(); ++i) {
-                    enemies++;
                 }
-                message.append(enemies)
-                        .append("\n");
-                break;
+
+                if (!room.getItems().isEmpty()) {
+                    message.append('\n')
+                            .append("Items:\n\n");
+                    int itemNumber = 1;
+                    for (Item item : room.getItems()) {
+                        message.append(itemNumber++)
+                                .append(". ")
+                                .append(item.getName())
+                                .append('\n');
+                    }
+                    message.append('\n');
+                }
+
             }
+            break;
 
-            case BATTLE: {
-
-            }
-
-            case FLEEING: {
-
-            }
         }
 
     }
 
-    private static void processInput() {
+    private static void displayOutput() {
+//        System.out.print(message);
+//        message = new StringBuilder();
+        consolePrompt.print();
+    }
+
+    private static void getInput() {
 
         // get input
-        String line;
-        Command command;
-
-        while ((line = scanner.nextLine().trim()).equals("")) {
-        }
+        String line = scanner.nextLine().trim();
 
         // input -> command
         try {
             command = new Command(line);
         } catch (UnknownCommandException e) {
-            message.append(new UnknownCommandMessage());
-            return;
+            // TODO
+            message.append(new UnknownCommandMessage())
+                    .append('\n');
         }
+    }
+
+    private static void processCommand() {
 
         // command -> decision
         CommandAction action = command.getAction();
         List<String> args = command.getArgs();
+
+        switch(state) {
+            case HOSTILES_APPEAR: {
+                // go back (flee)
+                // fight ()
+
+            } break;
+
+            default:
+                break;
+        }
+
         switch (action) {
             case QUIT: {
                 System.exit(0);
-                break;
-            }
+            } break;
+
             case HELP: {
                 message.append(new HelpMessage());
-                break;
-            }
+            } break;
             case GO: {
                 if (args.isEmpty())
                     args.add("back");
@@ -212,20 +310,18 @@ public class Main {
                     }
 
                 }
-                break;
-            }
+            } break;
             case TAKE: {
                 if (args.isEmpty())
                     args.add("all");
                 // read args
-                break;
-            }
+
+            } break;
             case INVENTORY: {
                 // show inventory
                 message.append("- INVENTORY -")
                         .append("\n");
-                break;
-            }
+            } break;
         }
 
         System.out.println(ConsoleColor.GREEN + "action: " + action);
@@ -254,33 +350,33 @@ public class Main {
             switch (damageParts[i].getRarity()) {
                 case COMMON:
 //                    label = ConsoleColor.WHITE_BOLD_BRIGHT;
-                    label = ConsoleColor.WHITE_BRIGHT;
-                    secondary = ConsoleColor.WHITE;
+                    label = ConsoleColor.WHITE_BRIGHT.toString();
+                    secondary = ConsoleColor.WHITE.toString();
                     break;
                 case UNCOMMON:
 //                    label = ConsoleColor.GREEN_BOLD_BRIGHT;
-                    label = ConsoleColor.GREEN_BRIGHT;
-                    secondary = ConsoleColor.GREEN;
+                    label = ConsoleColor.GREEN_BRIGHT.toString();
+                    secondary = ConsoleColor.GREEN.toString();
                     break;
                 case RARE:
 //                    label = ConsoleColor.CYAN_BOLD_BRIGHT;
-                    label = ConsoleColor.CYAN_BRIGHT;
-                    secondary = ConsoleColor.CYAN;
+                    label = ConsoleColor.CYAN_BRIGHT.toString();
+                    secondary = ConsoleColor.CYAN.toString();
                     break;
                 case EPIC:
 //                    label = ConsoleColor.PURPLE_BOLD_BRIGHT;
-                    label = ConsoleColor.PURPLE_BRIGHT;
-                    secondary = ConsoleColor.PURPLE;
+                    label = ConsoleColor.PURPLE_BRIGHT.toString();
+                    secondary = ConsoleColor.PURPLE.toString();
                     break;
                 case LEGENDARY:
 //                    label = ConsoleColor.YELLOW_BOLD_BRIGHT;
-                    label = ConsoleColor.YELLOW_BRIGHT;
-                    secondary = ConsoleColor.YELLOW;
+                    label = ConsoleColor.YELLOW_BRIGHT.toString();
+                    secondary = ConsoleColor.YELLOW.toString();
                     break;
                 default:
 //                    label = ConsoleColor.WHITE_BOLD_BRIGHT;
-                    label = ConsoleColor.WHITE_BRIGHT;
-                    secondary = ConsoleColor.WHITE;
+                    label = ConsoleColor.WHITE_BRIGHT.toString();
+                    secondary = ConsoleColor.WHITE.toString();
                     break;
             }
 
@@ -319,13 +415,13 @@ public class Main {
                 case CLEAVING:
                     typeWeights[1]++;
                     break;
-                case PENETRATIVE:
+                case IMPALING:
                     typeWeights[2]++;
                     break;
-                case LACERATIVE:
+                case LACERATING:
                     typeWeights[3]++;
                     break;
-                case EXPLOSIVE:
+                case EXPLODING:
                     typeWeights[4]++;
                     break;
             }

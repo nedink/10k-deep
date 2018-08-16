@@ -1,4 +1,4 @@
-package com.nedink.lang;
+package com.nedink.world;
 
 public interface Named {
     String getName();

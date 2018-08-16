@@ -12,7 +12,7 @@ public enum Rarity {
     LEGENDARY // yellow
     ;
 
-    public static String getColor(Rarity rarity) {
+    public static ConsoleColor getColor(Rarity rarity) {
         switch (rarity) {
             case COMMON:
                 return WHITE_BRIGHT;

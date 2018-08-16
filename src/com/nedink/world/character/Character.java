@@ -6,15 +6,15 @@ import java.util.List;
 
 public abstract class Character {
 
-    protected int level;
-    protected int pointsToNextLevel;
-    protected int levelProgress;
-    protected float inventoryMaxVolume;
-    protected float inventoryMaxWeight;
-    protected float health;
-    protected List<Item> inventory;
-    protected List<Item> equipSlots;
-    protected Race race;
+    int level;
+    int pointsToNextLevel;
+    int levelProgress;
+    float inventoryMaxVolume;
+    float inventoryMaxWeight;
+    float health;
+    Race race;
+    List<Item> inventory;
+    List<Item> equipSlots;
 
     public int acquireItem(Item item) {
         if (getInventoryVolume() + item.getVolume() > inventoryMaxVolume)
@@ -44,6 +44,14 @@ public abstract class Character {
             weight += item.getWeight();
 
         return weight;
+    }
+
+    public int getHitPoints() {
+        return (int) health;
+    }
+
+    public void doDamage(int hp) {
+        // TODO
     }
 
 }

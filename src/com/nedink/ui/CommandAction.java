@@ -5,6 +5,7 @@ public enum CommandAction {
     INVENTORY,
     GO,
     TAKE,
+    ENTER,
 //    GO_LEFT,
 //    GO_RIGHT,
 //    GO_BACK,

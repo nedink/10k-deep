@@ -12,7 +12,6 @@ import static com.nedink.world.item.Rarity.*;
 
 public class DamagePart extends ItemPart {
 
-    private Item item;
     public Item getItem() {
         return item;
     }
@@ -21,14 +20,11 @@ public class DamagePart extends ItemPart {
     }
 
     private DamageType damageType;
-
     private double baseRangeMin; // Range ~ in meters. Max possible should be 100m.
     private double baseRangeMax;
     private double baseAccuracy;
     private double baseDamage;
     private List<Double> damageModifiers;
-    private String serialCode;
-    private String name;
 
     // getters
     public Rarity getRarity() {
@@ -61,10 +57,6 @@ public class DamagePart extends ItemPart {
         return (int) Math.round(total);
     }
 
-    public String getSerialCode() {
-        return serialCode;
-    }
-
     @Override
     public String getName() {
         return name;
@@ -79,17 +71,19 @@ public class DamagePart extends ItemPart {
 
         part.initRarity();
 
-        part.initRace();
+        part.initRace(); // TODO: only spawns 'BLUMKRUHL'
 
         //
 
-        part.initDamageType();
+        part.initDamageType(); // TODO: assumes 'BLUMKRUHL'
 
-        part.initWeight();
+        part.initRange();
 
-        part.initVolume();
+        part.initWeight(); // TODO: assumes 'BLUMKRUHL'
 
-        part.initDamageMod();
+        part.initVolume(); // TODO: assumes 'BLUMKRUHL'
+
+        part.initDamageMod(); // TODO: assumes 'BLUMKRUHL'
 
         //
 
@@ -156,20 +150,43 @@ public class DamagePart extends ItemPart {
         if (damageTypeRoll > damageTypeWeights[0])
             damageType = DamageType.CLEAVING;
         if (damageTypeRoll > damageTypeWeights[1])
-            damageType = DamageType.PENETRATIVE;
+            damageType = DamageType.IMPALING;
         if (damageTypeRoll > damageTypeWeights[2])
-            damageType = DamageType.LACERATIVE;
+            damageType = DamageType.LACERATING;
         if (damageTypeRoll > damageTypeWeights[3])
-            damageType = DamageType.EXPLOSIVE;
+            damageType = DamageType.EXPLODING;
+    }
+
+    private void initRange() {
+
     }
 
     private void initWeight() {
         // - RACE: BLUMKRUUL
         // ++
 
-        double baseWeight = 10.0; // kg
+        double baseWeight = 1.0; // kg
 
         double weightModifier = 0.0;
+
+        // damage type
+        switch (damageType) {
+            case BLUNT: {
+                weightModifier += 1.0;
+                break;
+            }
+            case CLEAVING: {
+                weightModifier += 0.4;
+                break;
+            }
+            case IMPALING: {
+                weightModifier += 0.2;
+                break;
+            }
+            case EXPLODING: {
+                weightModifier += 0.4;
+            }
+        }
 
         // race
         switch (race) {
@@ -242,13 +259,18 @@ public class DamagePart extends ItemPart {
         }
 
         // race
-        switch (race) {
-            case BLUMKRUUL: {
-                damageModifiers.add(range(0.30, 0.30)); // 30 %
-            }
-            default:
-                break;
-        }
+//        switch (race) {
+//            case BLUMKRUUL: {
+//                damageModifiers.add(range(0.30, 0.30)); // 30 %
+//            }
+//            default:
+//                break;
+//        }
+
+        // weight
+        damageModifiers.add(weight * 0.1);
+        System.out.println(weight);
+        System.out.println(getDamage());
     }
 
     @Override
@@ -266,9 +288,9 @@ public class DamagePart extends ItemPart {
         // common +
         BLUNT,          // 4 parts      // generally more suited for closer range except when on projectiles
         CLEAVING,       // 3 parts
-        PENETRATIVE,    // 2 parts
-        LACERATIVE,     // 1 part       // somewhat uncommon
-        EXPLOSIVE,      // 0.5 parts    // most uncommon // generally more suited for greater range except when on melee
+        IMPALING,       // 2 parts
+        LACERATING,     // 1 part       // somewhat uncommon
+        EXPLODING,      // 0.5 parts    // most uncommon // generally more suited for greater range except when on melee
 
 
         // rare +

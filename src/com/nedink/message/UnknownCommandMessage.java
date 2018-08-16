@@ -12,6 +12,6 @@ public class UnknownCommandMessage extends AbstractMessage {
                ConsoleColor.RED +
                "for a list of commands." +
                ConsoleColor.RESET +
-               "\n";
+               '\n';
     }
 }

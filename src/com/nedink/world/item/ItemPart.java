@@ -1,11 +1,7 @@
 package com.nedink.world.item;
 
-import com.nedink.lang.Lang;
-import com.nedink.lang.Named;
+import com.nedink.world.Named;
 import com.nedink.world.character.Race;
-import com.sun.xml.internal.ws.server.sei.TieHandler;
-
-import javax.sound.midi.Soundbank;
 
 import static com.nedink.util.Rand.rand;
 import static com.nedink.world.item.Rarity.*;
@@ -20,17 +16,34 @@ public abstract class ItemPart implements Named {
     protected Rarity rarity;
     protected double volume;
     protected double weight;
-    public Item getItem() {
-        return item;
-    }
 
     @Override
     public String getName() {
         return name;
     }
 
+    public Item getItem() {
+        return item;
+    }
+
     public void setItem(Item item) {
         this.item = item;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
+    public Race getRace() {
+        return race;
+    }
+
+    public Rarity getRarity() {
+        return rarity;
     }
 
     public double getVolume() {
@@ -49,14 +62,6 @@ public abstract class ItemPart implements Named {
         this.weight = weight;
     }
 
-    public int getLevel() {
-        return level;
-    }
-
-    public void setLevel(int level) {
-        this.level = level;
-    }
-
     protected void initRarity() {
 
         // level bonus           @ lvl 1         @ lvl 50
@@ -69,15 +74,15 @@ public abstract class ItemPart implements Named {
         double rarityRoll = rand.nextDouble();
 
         // TODO: TESTING
-        double[] rarityWeights = {1, 1, 1, 1, 1};
-//        double[] rarityWeights = {0,0,0,0,1};
-//        double[] rarityWeights = {
-//                0.9                                                   ,
-//                0.1   + 0.008   * level + 0.00016 * Math.pow(level, 2),
-//                0.02  + 0.004   * level + 0.00016 * Math.pow(level, 2),
-//                0.005 + 0.0015  * level + 0.00006 * Math.pow(level, 2),
-//                0.001 + 0.00015 * level + 0.00002 * Math.pow(level, 2),
-//        };
+//        double[] rarityWeights = {1, 1, 1, 1, 1};
+//        double[] rarityWeights = {2,0,0,0,0};
+        double[] rarityWeights = {
+                0.9                                                   ,
+                0.1   + 0.008   * level + 0.00016 * Math.pow(level, 2),
+                0.02  + 0.004   * level + 0.00016 * Math.pow(level, 2),
+                0.005 + 0.0015  * level + 0.00006 * Math.pow(level, 2),
+                0.001 + 0.00015 * level + 0.00002 * Math.pow(level, 2),
+        };
 
         double total = 0;
         for (double d : rarityWeights)
@@ -99,7 +104,7 @@ public abstract class ItemPart implements Named {
     }
 
     protected void initRace() {
-        race = Race.BLUMKRUUL;
+        race = rand.nextDouble() < .5 ? Race.BLUMKRUUL : Race.HUMAN;
     }
 
     @Override

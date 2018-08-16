@@ -1,5 +1,3 @@
-Unknown command. Type 'help' to show a list of commands.
-
 ROOM DESCRIPTION - You are in room ...
 ...
 ...
@@ -11,6 +9,8 @@ Items:
     2. Thing2
     3. Thing3
 
+Unknown command. Type 'help' to show a list of commands.
+
 > ...
 
 
@@ -21,9 +21,52 @@ Items:
 
 
 
+                                 -> INVENTORY <-
+CAPACITY -----------------------------------------------------------------------
+    Load:                                                                17 / 20
+    Volume:                                                              13 / 20
+ITEMS --------------------------------------------------------------------------
+1. REHIU UEF'IUHA                               [==========                    ]
+2. RHUDERER-143                                 [=======================       ]
+3. JUFNM                                        [==============================]
+4. UHASDJH EHR                                  [==                            ]
+COMMANDS -----------------------------------------------------------------------
+> compare ITEM ITEM
+> equip ITEM SLOT
+
+>
 
 
 
+
+
+
+
+
+
+
+
+- enter room
+- are there enemies?
+    - yes!
+
+---------------------------------------------
+
+You are in a room.
+
+3 hostiles:
+
+    1. BLU'URKAL  -                   10/10 [====================]
+    2. ERT-UT'Y   -                   5/10  [==========          ]
+    3. YDFU       -                   7/10  [==============      ]
+
+CHOOSE TARGET
+>
+
+---------------------------------------------
+
+- enter combat
+-
 
 
 
