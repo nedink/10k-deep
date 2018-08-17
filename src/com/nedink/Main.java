@@ -181,8 +181,7 @@ public class Main {
             case CUTSCENE: {
                 // ONLY OUTPUT. NO INPUT IS CONSIDERED; PRESSING 'ENTER' MOVES CUTSCENE ALONG.
 
-            }
-            break;
+            } break;
 
             case ROOM: {
 
@@ -196,10 +195,6 @@ public class Main {
                 consolePrompt.getMainMessage().add("");
 
                 // enemies
-                if (!room.getEnemies().isEmpty()) {
-                    // enter fight!
-
-                }
 
                 if (!room.getItems().isEmpty()) {
                     message.append('\n')
@@ -214,8 +209,14 @@ public class Main {
                     message.append('\n');
                 }
 
-            }
-            break;
+            } break;
+
+            case HOSTILES_APPEAR: {
+
+            } break;
+
+            default:
+                break;
 
         }
 

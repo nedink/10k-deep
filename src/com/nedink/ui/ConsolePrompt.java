@@ -39,20 +39,19 @@ public class ConsolePrompt {
         mainMessage = new ArrayList<>();
         menu = new Menu();
         inputLine = "> ";
-
-        advanceSpace = HEIGHT;
     }
 
     public void print() {
 
         StringBuilder output = new StringBuilder();
 
+        advanceSpace = HEIGHT
+                - mainMessage.size()
+                - menu.outputHeight();
+
         // add space to advance screen position
         for (int i = 0; i < advanceSpace; ++i)
             output.append('\n');
-
-        advanceSpace += mainMessage.size();
-        advanceSpace += menu.outputHeight();
 
         // main message
         for (String line : mainMessage) {
